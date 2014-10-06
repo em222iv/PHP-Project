@@ -31,10 +31,6 @@ class viewClass {
                               <a><img src='pics/imgres-1.jpg'/></a>
                               <h6 class='panel'>Description</h6>
                           </div>
-                          <div class='large-3 small-6 columns'>
-                              <a><img src='pics/imgres-1.jpg'/></a>
-                              <h6 class='panel'>Description</h6>
-                          </div>
 
                       </div>
                   </div>
