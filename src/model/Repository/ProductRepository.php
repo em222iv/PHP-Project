@@ -43,7 +43,7 @@ class productRepository{
         //ta emot i model och loopa ut till array
         //sätt in html till bild och skriv ut i productview
         $this->categories = $query->fetchAll();
-        print_r($this->categories);
+
 
         return true;
     }

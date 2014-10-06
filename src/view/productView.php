@@ -18,7 +18,7 @@ class viewClass {
     }
     public function setImage($images) {
         $this->image = $images;
-        var_dump($this->image);
+
     }
 
 
@@ -110,7 +110,7 @@ class viewClass {
                       <a class='large button expand' href=#Cart>
                             Update Cart
                       </a>
-                      <a class='large button expand' href=#Cart>
+                      <a href='?checkout' class='large button expand' >
                             Continue to checkout
                       </a>
                   </div>

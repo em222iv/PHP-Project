@@ -7,7 +7,7 @@
  */
 
 
-class productController {
+class productController{
 
     private $productView;
     private $adminView;
