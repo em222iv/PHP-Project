@@ -6,9 +6,19 @@
  * Time: 14:26
  */
 
+
+require_once("././src/model/productModel.php");
 class viewClass {
 
+    private $productModel;
+
+    function __construct() {
+        $this->productModel = new productModel();
+    }
+
     public function form() {
+
+        $image = $this->productModel->getCategoryImage();
 
         $ret = "
 
@@ -17,7 +27,9 @@ class viewClass {
 
                   <div class='large-12 columns'>
                       <div class=row>
-                          <div class='large-3 small-6 columns'>
+
+
+                          <!--<div class='large-3 small-6 columns'>
                               <a><img src='pics/imgres-1.jpg'/></a>
                               <h6 class='panel'>Description</h6>
                           </div>
@@ -32,11 +44,17 @@ class viewClass {
                               <h6 class='panel'>Description</h6>
                           </div>
 
+
+                          <div class='large-3 small-6 columns'>
+                              <a><img src='pics/imgres-1.jpg'/></a>
+                              <h6 class='panel'>Description</h6>
+                          </div>-->
+
+
+
                       </div>
                   </div>
               </div>
-
-
 
           <div class=row>
           <div class='large-12 columns'>
@@ -98,5 +116,4 @@ class viewClass {
         ";
         return $ret;
     }
-
 }
