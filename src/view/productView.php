@@ -11,14 +11,19 @@ require_once("././src/model/productModel.php");
 class viewClass {
 
     private $productModel;
+    private $image;
 
     function __construct() {
         $this->productModel = new productModel();
     }
+    public function setImage($images) {
+        $this->image = $images;
+        var_dump($this->image);
+    }
+
 
     public function form() {
 
-        $image = $this->productModel->getCategoryImage();
 
         $ret = "
 

@@ -8,17 +8,23 @@
 require_once("././src/view/productView.php");
 require_once("././src/view/adminView.php");
 require_once("././src/model/productModel.php");
+require_once("Repository/ProductRepository.php");
+require_once("productController.php");
 
 class ControllerClass {
 
+    private $productRepository;
     private $view;
     private $adminView;
     private $productModel;
+    private $productController;
 
     public function __construct() {
+        $this->productRepository = new ProductRepository();
         $this->view = new ViewClass();
         $this->adminView = new adminView();
         $this->productModel = new productModel();
+        $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository);
     }
     //direct errormessages from model to view
     function controllerClass() {
@@ -39,7 +45,8 @@ class ControllerClass {
             return $this->adminView->addForm();
         }
 
-        $this->productModel->importCategories();
+        $this->productController->productControll();
+
         return $this->view->form();
 
 
