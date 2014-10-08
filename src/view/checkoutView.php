@@ -82,7 +82,6 @@ class checkoutView {
                     </select>
                   </label>
                 </div>
-
                 <hr>
         </form>
 

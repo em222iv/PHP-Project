@@ -14,6 +14,7 @@ class loginRepository{
     protected $dbConnection;
     protected $dbTable;
 
+    private $db_id;
     private $db_username;
     private $db_password;
 
@@ -33,15 +34,17 @@ class loginRepository{
 
         $db = $this->connectdb();
 
-        $sql = "SELECT * FROM webshop WHERE username  = ?";
+        $sql = "SELECT * FROM admin WHERE username  = ?";
         $params = array($username);
 
         $query = $db -> prepare($sql);
         $query -> execute($params);
 
         $result = $query -> fetch();
+        $this->db_id = $result[0];
         $this->db_username = $result[1];
         $this->db_password = $result[2];
+
 
         return true;
     }
@@ -53,6 +56,10 @@ class loginRepository{
     }
     public function getDBPassword(){
         return $this->db_password;
+
+    }
+    public function getDBId(){
+        return $this->db_id;
 
     }
 }

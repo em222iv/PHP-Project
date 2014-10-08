@@ -6,8 +6,11 @@
  * Time: 14:27
  */
 require_once("././src/view/productView.php");
-require_once("././src/view/adminView.php");
+require_once("././src/view/admin/adminView.php");
+require_once("././src/view/admin/addView.php");
+require_once("././src/view/admin/editView.php");
 require_once("././src/view/checkoutView.php");
+
 require_once("././src/model/productModel.php");
 require_once("././src/model/loginModel.php");
 require_once("././src/model/Repository/ProductRepository.php");
@@ -27,19 +30,23 @@ class ControllerClass {
     private $loginController;
     private $loginModel;
     private $loginRepository;
+    private $addView;
+    private $editView;
 
     public function __construct() {
         $this->checkoutView = new checkoutView();
         $this->view = new ViewClass();
         $this->adminView = new adminView();
+        $this->addView = new AddView();
 
         $this->productRepository = new ProductRepository();
         $this->productModel = new productModel();
         $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository);
 
-        $this->loginModel = new loginModel();
         $this->loginRepository = new loginRepository();
-        $this->loginController = new loginController($this->loginController, $this->adminView, $this->loginModel, $this->loginRepository);
+        $this->loginModel = new loginModel($this->loginRepository);
+        $this->loginController = new loginController($this->loginController, $this->adminView, $this->loginModel, $this->loginRepository, $this->addView);
+
 
 
     }
@@ -48,17 +55,14 @@ class ControllerClass {
     }
 
     public function formControll() {
-        if($this->adminView->getAdmin() || $this->adminView->edit() || $this->adminView->add()){
+        if($this->adminView->getAdmin() || $this->adminView->edit() || $this->adminView->add()|| $this->adminView->getLogged()){
             return $this->loginController->loginControll();
         }
-
 
         if($this->checkoutView->checkoutClicked()){
             return $this->checkoutView->checkoutUserInfoForm();
         }
         $this->productController->productControll();
-
         return $this->view->form();
-
     }
 }
