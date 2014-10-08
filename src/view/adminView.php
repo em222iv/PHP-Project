@@ -9,13 +9,30 @@
 class adminView {
 
 //  Navigation with getters for admin pages
-    function adminWantsToLogin() {
+
+    public function getUsername() {
+        if(isset($_POST['username']))
+        {
+            return $_POST['username'];
+        }
+        return false;
+    }
+
+    public function getPassword(){
+        if(isset($_POST['password']))
+        {
+            return $_POST['password'];
+        }
+        return false;
+    }
+
+    function getAdmin() {
         if(isset($_GET['admin'])) {
                 return true;
             }
         return false;
     }
-    function adminIsLoggedIn() {
+    function getLogged() {
         if(isset($_GET['logged'])) {
             return true;
         }
@@ -42,25 +59,27 @@ class adminView {
     public function loginForm() {
 
     $ret = "
-        <form>
+
+        <form method='post'>
           <div class='row'>
+            <h3>Administrator</h3>
             <div class='large-6 columns'>
                 <label> Username
               <!--<label class='error''>Error-->
-                <input type='text' class='error' />
+                <input type='text' name='username'>
               </label>
              <!-- <small class='error'></small>-->
             </div>
-
             <div class='large-6 columns'>
                 <label> Password
-                <input type='password' />
+                    <input type='password' name='password'>
               </label>
             </div>
-            <a href='?logged' class='button expand'>LOGIN</a>
+            <input type='submit' class='button expand' value='LOGIN'>
           </div>
         </form>
     ";
+
     return $ret;
 }
 
@@ -69,6 +88,7 @@ public function loggedInForm() {
     $ret = "
              <div class='row'>
                 <div class='large-12 columns'>
+                <h3>Administrator</h3>
                 <a href='?add' class='button expand'>ADD</a>
                 <a href='?edit' class='button expand'>EDIT</a>
                 </div>

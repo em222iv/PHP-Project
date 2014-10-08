@@ -17,10 +17,11 @@ class HTMLView {
                     <title>Webshop | Welcome</title>
                     <link rel=stylesheet href='css/foundation.css' />
                     <link rel=stylesheet href=css/foundation-icons.css />
-                    <script src=js/vendor/modernizr.js></script>
-                    <script src=js/vendor/jquery.js></script>
-                    <script src=js/foundation/foundation.js></script>
-                   <!--  <script>
+                    <script src=/js/vendor/modernizr.js></script>
+                    <script src=/js/vendor/jquery.js></script>
+                    <script src=/js/foundation/foundation.js></script>
+
+                  <!--  <script>
                           $(document).ready(function(){
                           $(document).foundation();
                         });
@@ -51,7 +52,7 @@ class HTMLView {
                                       <li><a href=#Cart>Cart(4)</a></li>
                                   </ul>
 
-                                &lt;!&ndash;  <ul class=right>
+                                  <ul class=right>
                                       <li class=search>
                                           <form>
                                               <input type=search>
@@ -60,7 +61,7 @@ class HTMLView {
                                       <li class=has-button>
                                           <a class=small button href=#>Search</a>
                                       </li>
-                                  </ul>&ndash;&gt;
+                                  </ul>
                               </section>
                            </nav>
                       </div>
@@ -71,15 +72,17 @@ class HTMLView {
                   <div class=row>
                       <div class='large-12 columns'>
                           <div class=slider>
-                              <img src=http://placehold.it/1000x400&text=[img] />
+                              <img src='http://placehold.it/1000x450&text=Badly stuffed Lols'>
                           </div>
                           <hr/>
 
                       </div>
+
                   </div>
 <!-- INSERT CONTENT -->
 
                 $body
+
 
 <!-- FOOTER -->
                 <footer class=row>

@@ -44,16 +44,26 @@ class checkoutView {
                     <input type='text' placeholder='Moms adress' />
                   </label>
                 </div>
-                <hr>
-                 <div class='large-6 columns'>
+                <div class='large-2 columns''>
+                  <label>Postnumber
+                    <input type='text' placeholder='ex. 76240' />
+                  </label>
+                </div>
+
+                 <div class='large-8 columns'>
                   <label>Town/City
                     <input type='text' placeholder='Calemare' />
                   </label>
                 </div>
                 <hr>
-                 <div class='large-6 columns'>
-                  <label>Phone
+                 <div class='large-3 columns'>
+                  <label>Phone 1
                     <input type='text' placeholder='+45 70 435 23 41' />
+                  </label>
+                </div>
+                 <div class='large-3 columns'>
+                  <label>Phone 2
+                    <input type='text' placeholder='0176 19156' />
                   </label>
                 </div>
                 <hr>
@@ -62,6 +72,7 @@ class checkoutView {
                         <textarea placeholder='Anything we need to know?'></textarea>
                     </label>
                 </div>
+                <hr>
                 <div class='large-12 columns'>
                   <label>Payment method
                     <select>
@@ -70,7 +81,9 @@ class checkoutView {
                       <option value='Invoice'>Invoice</option>
                     </select>
                   </label>
-            </div>
+                </div>
+
+                <hr>
         </form>
 
 
@@ -86,57 +99,57 @@ class checkoutView {
                                   <h5 class=subheader>This is your shoppingcart. Please mind your order to be correct.
                                   </h5>
                                   <div class=show-for-small align=center>
-                                        <a href=# class=small radius button>Edit cart</a><br>
-                                        <a href=# class=small radius button>Continue to checkout</a>
+                                        <a href=# class='small radius button expand'>Update cart</a><br>
+                                        <a href=# class='small radius button expand'>Confirm purchase</a>
                                   </div>
                               </div>
-                              <div class='large-6 small-6 columns'>
-                                  <ul class=inline-list>
-                                      <li>
-                                            <a href=#>Article 1</a>
-                                            <li>(1)<li/>
-                                            <li><a><span title='add'><i class=fi-plus large></i></span></a><li/>
-                                            <li><a><span title='decrease'><i class=fi-minus large></i></span></a><li/>
-                                            <li><a><span title='delete'><i class=fi-x large></i></span></a><li/>
-                                            <li><i class='fi-price-tag large'> 10.00</i><li/>
-                                      </li><br/><hr/>
-                                      <li>
-                                          <a href=#>Article 2</a>
-                                          <li>(1)<li/>
-                                         <li><a><span title='add'><i class=fi-plus large></i></span></a><li/>
-                                          <li><a><span title='decrease'><i class=fi-minus large></i></span></a><li/>
-                                          <li><a><span title='delete'><i class=fi-x large></i></span></a><li/>
-                                          <li><i class='fi-price-tag large'> 100.00</i><li/>
-                                      </li><br/><hr/>
-                                      <li>
-                                            <a href=#>Article 2</a>
-                                            <li>(2)<li/>
-                                            <li><a><span title='add'><i class=fi-plus large></i></span></a><li/>
-                                            <li><a><span title='decrease'><i class=fi-minus large></i></span></a><li/>
-                                            <li><a><span title='delete'><i class=fi-x large></i></span></a><li/>
-                                            <li><i class='fi-price-tag large'> 267.00</i><li/>
-                                      </li><br/><hr/>
-                                      <li>
-                                            Total: Five billion dollars
-                                      </li>
-                                  </ul>
+                             <div class='large-6 small-6 columns'>
+
+                                <div id='products'>
+
+                                    <div class='large-4 small-8 columns' ><a href='#'>BirdieBoo</a></div>
+                                    <div class='large-1 small-8 columns'><a href='#'><span title='add'><i class='fi-plus large'></i></span></a></div>
+                                    <div class='large-1 small-8 columns'><a href='#'><span title='decrease'><i class='fi-minus large'></i></span></a></div>
+                                    <div class='large-1 small-8 columns'><a href='#'><span title='delete'><i class='fi-x large'></i></span></a></div>
+                                    <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
+                                    <br/><hr>
+
+                                    <div class='large-4 small-8 columns' ><a href='#'>Article 1</a></div>
+                                    <div class='large-1 small-8 columns'><a href='#'><span title='add'><i class='fi-plus large'></i></span></a></div>
+                                    <div class='large-1 small-8 columns'><a href='#'><span title='decrease'><i class='fi-minus large'></i></span></a></div>
+                                    <div class='large-1 small-8 columns'><a href='#'><span title='delete'><i class='fi-x large'></i></span></a></div>
+                                    <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
+                                    <br/><hr>
+
+                                    <div class='large-4 small-8 columns' ><a href='#'>Article 1</a></div>
+                                    <div class='large-1 small-8 columns'><a href='#'><span title='add'><i class='fi-plus large'></i></span></a></div>
+                                    <div class='large-1 small-8 columns'><a href='#'><span title='decrease'><i class='fi-minus large'></i></span></a></div>
+                                    <div class='large-1 small-8 columns'><a href='#'><span title='delete'><i class='fi-x large'></i></span></a></div>
+                                    <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
+                                    <br/><hr>
+                            <div>
+                                                    <p>
+                                                        Total: TROlortlorlolo
+                                                    </p>
+                                                </div>
+                                            </div>
+                                      </div>
+                                  </div>
                               </div>
+                          </div>
+                          <div class='large-4 columns hide-for-small'>
+                              <h4>Options</h4><hr/>
+
+                              <a href='?' class='large button expand' >
+                                    Update
+                              </a>
+                               <a href='?checkout' class='large button expand' >
+                                     To checkout
+                              </a>
                           </div>
                       </div>
                   </div>
-                  <div class='large-4 columns hide-for-small'>
-                      <h4>Options</h4><hr/>
-
-                      <a href='?checkout' class='large button expand' >
-                            Update
-                      </a>
-                       <a href='?checkout' class='large button expand' >
-                            Confirm purchase
-                      </a>
-                  </div>
               </div>
-          </div>
-      </div>
     ";
         return $ret;
     }
