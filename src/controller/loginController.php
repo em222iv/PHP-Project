@@ -8,24 +8,19 @@
 
 class loginController{
     private $adminView;
-    private $loginController;
     private $loginModel;
     private $loginRepository;
-    private $addView;
     private $adminController;
 
     private $username;
     private $password;
-
     private $db_username;
     private $db_password;
 
-    public function __construct($loginController, adminView $adminView, loginModel $loginModel, loginRepository $loginRepository, AddView $addView, AdminController $adminController) {
-        $this->adminView =  $adminView;
-        $this->loginController = $loginController;
+    public function __construct(loginModel $loginModel, loginRepository $loginRepository,adminView $adminView,  $adminController) {
         $this->loginModel = $loginModel;
         $this->loginRepository = $loginRepository;
-        $this->addView = $addView;
+        $this->adminView = $adminView;
         $this->adminController = $adminController;
 
         $this->username = $this->adminView->getUsername();

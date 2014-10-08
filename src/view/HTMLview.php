@@ -72,7 +72,7 @@ class HTMLView {
                   <div class=row>
                       <div class='large-12 columns'>
                           <div class=slider>
-                              <img src='http://placehold.it/1000x450&text=Badly stuffed Lols'>
+                              <img src='http://placehold.it/1000x250&text=Badly stuffed Lols'>
                           </div>
                           <hr/>
 
@@ -82,7 +82,6 @@ class HTMLView {
 <!-- INSERT CONTENT -->
 
                 $body
-
 
 <!-- FOOTER -->
                 <footer class=row>

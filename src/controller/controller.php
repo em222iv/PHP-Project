@@ -41,16 +41,17 @@ class ControllerClass {
         $this->view = new ViewClass();
         $this->adminView = new adminView();
         $this->addView = new AddView();
+        $this->editView = new EditView();
 
         $this->productRepository = new ProductRepository();
         $this->productModel = new productModel();
         $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository);
 
-        $this->adminController = new AdminController($this->loginController, $this->adminView, $this->addView, $this->adminController);
+        $this->adminController = new AdminController($this->loginController, $this->adminView, $this->addView, $this->adminController, $this->editView);
 
         $this->loginRepository = new loginRepository();
         $this->loginModel = new loginModel($this->loginRepository);
-        $this->loginController = new loginController($this->loginController, $this->adminView, $this->loginModel, $this->loginRepository, $this->addView, $this->adminController);
+        $this->loginController = new loginController($this->loginModel, $this->loginRepository,$this->adminView, $this->adminController);
 
 
 
@@ -62,7 +63,7 @@ class ControllerClass {
     public function formControll() {
 
         if($this->adminController->adminControll()){
-            $this->loginController->loginControll();
+            return $this->loginController->loginControll();
         }
 
         if($this->checkoutView->checkoutClicked()){
