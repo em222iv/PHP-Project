@@ -8,11 +8,17 @@
 
 class AddView {
 
+    public function addCategory() {
+        if(isset($_GET['addCategory'])){
 
-    public function getAddCategory() {
-        if(isset($_GET['?add/category']))
-        {
-            return $_GET['?add/category'];
+            return true;
+        }
+        return false;
+    }
+
+    function add() {
+        if(isset($_GET['add'])) {
+            return true;
         }
         return false;
     }
@@ -25,8 +31,8 @@ class AddView {
                 <div class='large-12 columns'>
                    <h3>Administrator</h3>
                 </div>
-                <a href='?add/category' class='button expand'>Add Category</a>
-                <a href='?add/article' class='button expand'>Add Article</a>
+                <a href='?addCategory' class='button expand'>ADD CATEGORY</a>
+                <a href='?addArticle' class='button expand'>ADD ARTICLE</a>
                 <a href='?logged' class='button expand'>BACK</a>
             </div>
     ";
@@ -44,9 +50,8 @@ class AddView {
                             <input type='text' placeholder='ex. Otters' value='categoryName'/>
                           </label>
                         </div>
-
                     </div>
-                    <input type='submit' class='button expand' name='addCategory' value='Add Cateogry'>
+                    <input type='submit' class='button expand' name='addCategory' value='CONFIRM'>
                     <a href='?add' class='button expand'>BACK</a>
                 </div>
             </form>

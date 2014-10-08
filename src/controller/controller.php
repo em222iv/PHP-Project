@@ -15,8 +15,10 @@ require_once("././src/model/productModel.php");
 require_once("././src/model/loginModel.php");
 require_once("././src/model/Repository/ProductRepository.php");
 require_once("././src/model/Repository/loginRepository.php");
+
 require_once("productController.php");
 require_once("loginController.php");
+require_once("adminController.php");
 
 
 class ControllerClass {
@@ -32,6 +34,7 @@ class ControllerClass {
     private $loginRepository;
     private $addView;
     private $editView;
+    private $adminController;
 
     public function __construct() {
         $this->checkoutView = new checkoutView();
@@ -43,9 +46,11 @@ class ControllerClass {
         $this->productModel = new productModel();
         $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository);
 
+        $this->adminController = new AdminController($this->loginController, $this->adminView, $this->addView, $this->adminController);
+
         $this->loginRepository = new loginRepository();
         $this->loginModel = new loginModel($this->loginRepository);
-        $this->loginController = new loginController($this->loginController, $this->adminView, $this->loginModel, $this->loginRepository, $this->addView);
+        $this->loginController = new loginController($this->loginController, $this->adminView, $this->loginModel, $this->loginRepository, $this->addView, $this->adminController);
 
 
 
@@ -55,14 +60,16 @@ class ControllerClass {
     }
 
     public function formControll() {
-        if($this->adminView->getAdmin() || $this->adminView->edit() || $this->adminView->add()|| $this->adminView->getLogged()){
-            return $this->loginController->loginControll();
+
+        if($this->adminController->adminControll()){
+            $this->loginController->loginControll();
         }
 
         if($this->checkoutView->checkoutClicked()){
             return $this->checkoutView->checkoutUserInfoForm();
         }
         $this->productController->productControll();
+
         return $this->view->form();
     }
 }

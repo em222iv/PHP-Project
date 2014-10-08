@@ -12,6 +12,7 @@ class loginController{
     private $loginModel;
     private $loginRepository;
     private $addView;
+    private $adminController;
 
     private $username;
     private $password;
@@ -19,12 +20,13 @@ class loginController{
     private $db_username;
     private $db_password;
 
-    public function __construct($loginController, adminView $adminView, loginModel $loginModel, loginRepository $loginRepository, AddView $addView) {
+    public function __construct($loginController, adminView $adminView, loginModel $loginModel, loginRepository $loginRepository, AddView $addView, AdminController $adminController) {
         $this->adminView =  $adminView;
         $this->loginController = $loginController;
         $this->loginModel = $loginModel;
         $this->loginRepository = $loginRepository;
         $this->addView = $addView;
+        $this->adminController = $adminController;
 
         $this->username = $this->adminView->getUsername();
         $this->password = $this->adminView->getPassword();
@@ -39,15 +41,7 @@ class loginController{
 
         //login if session exist
         if($this->loginModel->loginSESSIONExist()){
-
-            if($this->adminView->edit()){
-                return $this->adminView->edit();
-            }
-            if($this->adminView->add()){
-                return $this->addView->addForm();
-            }
-
-            return $this->adminView->loggedInForm();
+            return $this->adminController->addControll();
         }
 
         //login verification -> logged in
@@ -66,10 +60,5 @@ class loginController{
         }
         //fixa url till ?admin
         return $this->adminView->loginForm();
-    }
-    public function addControll() {
-        if($this->addView->getAddCategory()){
-
-        }
     }
 }
