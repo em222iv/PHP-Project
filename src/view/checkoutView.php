@@ -113,19 +113,7 @@ class checkoutView {
                                     <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
                                     <br/><hr>
 
-                                    <div class='large-4 small-8 columns' ><a href='#'>Article 1</a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='add'><i class='fi-plus large'></i></span></a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='decrease'><i class='fi-minus large'></i></span></a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='delete'><i class='fi-x large'></i></span></a></div>
-                                    <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
-                                    <br/><hr>
 
-                                    <div class='large-4 small-8 columns' ><a href='#'>Article 1</a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='add'><i class='fi-plus large'></i></span></a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='decrease'><i class='fi-minus large'></i></span></a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='delete'><i class='fi-x large'></i></span></a></div>
-                                    <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
-                                    <br/><hr>
                             <div>
                                                     <p>
                                                         Total: TROlortlorlolo

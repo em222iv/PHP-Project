@@ -8,9 +8,62 @@
 
 class AdminModel{
 
-    public function validateAddArticle() {}
-    public function validateEditArticle() {}
-    public function validateAddCategory() {}
-    public function validateEditCategory() {}
+    private $adminRepository;
+    public function __construct(AdminRepository $adminRepository) {
+        $this->adminRepository = $adminRepository;
 
+    }
+
+    public function validateAddArticle($name,$desc,$price) {
+        var_dump('1');
+        if($this->adminRepository->doesArticleExist($name)){
+
+            if(strlen($name) < 2){
+                echo "Användarenamet är för kort. Minst 2 tecken";
+                return false;
+            }
+
+            if(strlen($desc) < 10){
+                echo "Det måste finnas en beskrivning av produkten";
+                return false;
+            }
+            var_dump('2');
+            if($price = "" || $price < 1){
+                echo "Ange ett pris";
+                return false;
+            }
+
+            if($name != strip_tags($name)) {
+                $this->username = strip_tags($name);
+                echo "Användarnamnet innehåller ogiltiga tecken";
+                return false;
+            }
+            var_dump('3');
+        }
+
+        return true;
+    }
+
+    public function validateEditArticle() {}
+
+    public function validateAddCategory($name,$image) {
+
+        if($this->adminRepository->doesCategoryExist($name)){
+            if($name == ""){
+                echo "No Category name";
+                return false;
+            }
+            return true;
+        }
+    }
+
+    public function validateEditCategory($name) {
+
+        if($name == ""){
+            echo "No Category name";
+            return false;
+        }
+
+        return true;
+    }
 }

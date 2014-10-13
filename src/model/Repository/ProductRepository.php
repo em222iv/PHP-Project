@@ -5,31 +5,26 @@
  * Date: 06/10/14
  * Time: 17:49
  */
+
+require_once("DBConnectionRepository.php");
 class productRepository{
 
-    protected $dbUsername = 'root';
-    protected $dbPassword = 'root';
-    protected $dbConnstring = 'mysql:host=localhost;dbname=webshop';
-    protected $dbConnection;
     protected $dbTable;
     private $categories;
     private $image;
     private $categoryObject;
 
-    //PDO connection
-    private function connectdb(){
+    private $dbConnection;
 
-        if ($this->dbConnection == NULL)
-            $this->dbConnection = new \PDO($this->dbConnstring, $this->dbUsername, $this->dbPassword);
+    public function __construct() {
+        $this->dbConnection = new DBConnectionRepository();
 
-        $this->dbConnection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
-        return $this->dbConnection;
     }
 
+    //PDO connection
     public function importCategories() {
 
-        $db = $this->connectdb();
+        $db = $this->dbConnection->connectdb();
 
         $sql = "SELECT * FROM categories";
         $params = array($this->categories);

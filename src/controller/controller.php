@@ -13,8 +13,11 @@ require_once("././src/view/checkoutView.php");
 
 require_once("././src/model/productModel.php");
 require_once("././src/model/loginModel.php");
+require_once("././src/model/adminModel.php");
+
 require_once("././src/model/Repository/ProductRepository.php");
 require_once("././src/model/Repository/loginRepository.php");
+require_once("././src/model/Repository/adminRepository.php");
 
 require_once("productController.php");
 require_once("loginController.php");
@@ -35,6 +38,8 @@ class ControllerClass {
     private $addView;
     private $editView;
     private $adminController;
+    private $adminModel;
+    private $adminRepository;
 
     public function __construct() {
         $this->checkoutView = new checkoutView();
@@ -43,11 +48,16 @@ class ControllerClass {
         $this->addView = new AddView();
         $this->editView = new EditView();
 
+
         $this->productRepository = new ProductRepository();
         $this->productModel = new productModel();
         $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository);
 
-        $this->adminController = new AdminController($this->loginController, $this->adminView, $this->addView, $this->adminController, $this->editView);
+
+
+        $this->adminRepository = new AdminRepository();
+        $this->adminModel = new AdminModel($this->adminRepository);
+        $this->adminController = new AdminController($this->loginController, $this->adminView, $this->addView, $this->adminController, $this->editView,$this->adminModel,$this->adminRepository);
 
         $this->loginRepository = new loginRepository();
         $this->loginModel = new loginModel($this->loginRepository);

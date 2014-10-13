@@ -72,7 +72,7 @@ class viewClass {
                                   </h5>
                                   <div class=show-for-small align=center>
                                         <a href=# class='small radius button expand'>Update cart</a><br>
-                                        <a href=# class='small radius button expand'>Confirm purchase</a>
+                                        <a href='?checkout' class='small radius button expand'>Continue to checkout</a>
                                   </div>
                               </div>
                              <div class='large-6 small-6 columns'>
@@ -86,19 +86,7 @@ class viewClass {
                                     <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
                                     <br/><hr>
 
-                                    <div class='large-4 small-8 columns' ><a href='#'>Article 1</a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='add'><i class='fi-plus large'></i></span></a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='decrease'><i class='fi-minus large'></i></span></a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='delete'><i class='fi-x large'></i></span></a></div>
-                                    <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
-                                    <br/><hr>
 
-                                    <div class='large-4 small-8 columns' ><a href='#'>Article 1</a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='add'><i class='fi-plus large'></i></span></a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='decrease'><i class='fi-minus large'></i></span></a></div>
-                                    <div class='large-1 small-8 columns'><a href='#'><span title='delete'><i class='fi-x large'></i></span></a></div>
-                                    <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
-                                    <br/><hr>
                             <div>
                                                     <p>
                                                         Total: TROlortlorlolo
@@ -116,7 +104,7 @@ class viewClass {
                                     Update
                               </a>
                                <a href='?checkout' class='large button expand' >
-                                     To checkout
+                                     Continue to checkout
                               </a>
                           </div>
                       </div>

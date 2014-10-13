@@ -73,6 +73,7 @@ class HTMLView {
                       <div class='large-12 columns'>
                           <div class=slider>
                               <img src='http://placehold.it/1000x250&text=Badly stuffed Lols'>
+                              <!--<img src='/pics/gif.gif'>-->
                           </div>
                           <hr/>
 

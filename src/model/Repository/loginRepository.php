@@ -6,33 +6,27 @@
  * Time: 18:08
  */
 
+
+require_once("DBConnectionRepository.php");
 class loginRepository{
 
-    protected $dbUsername = 'root';
-    protected $dbPassword = 'root';
-    protected $dbConnstring = 'mysql:host=localhost;dbname=webshop';
-    protected $dbConnection;
     protected $dbTable;
 
     private $db_id;
     private $db_username;
     private $db_password;
 
-    //PDO connection
-    private function connectdb(){
+    private $dbConnection;
 
-        if ($this->dbConnection == NULL)
-            $this->dbConnection = new \PDO($this->dbConnstring, $this->dbUsername, $this->dbPassword);
+    public function __construct() {
+        $this->dbConnection = new DBConnectionRepository();
 
-        $this->dbConnection->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
-        return $this->dbConnection;
     }
 
     //Data import section
     public function getDBUsers($username) {
 
-        $db = $this->connectdb();
+        $db = $this->dbConnection->connectdb();
 
         $sql = "SELECT * FROM admin WHERE username  = ?";
         $params = array($username);
