@@ -174,7 +174,6 @@ class AddView {
     }
 
     public function addArticleForm() {
-
         $categories = $this->categoryDropDownLoop();
 
         $ret = "
@@ -244,7 +243,7 @@ class AddView {
 
             //echo "Upload: " . $_FILES["file"]["name"] . "<br>";
             //echo "Type: " . $_FILES["file"]["type"] . "<br>";
-            if($_FILES["file"]["size"] > 1500000){
+            if($_FILES["file"]["size"] > 3000000){
                 echo "Error, picture is to big";
                 return false;
             } //"Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";

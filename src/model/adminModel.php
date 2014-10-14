@@ -15,7 +15,7 @@ class AdminModel{
     }
 
     public function validateAddArticle($name,$desc,$price) {
-        var_dump('1');
+
         if($this->adminRepository->doesArticleExist($name)){
 
             if(strlen($name) < 2){
@@ -27,7 +27,7 @@ class AdminModel{
                 echo "Det måste finnas en beskrivning av produkten";
                 return false;
             }
-            var_dump('2');
+
             if($price = "" || $price < 1){
                 echo "Ange ett pris";
                 return false;
@@ -38,13 +38,36 @@ class AdminModel{
                 echo "Användarnamnet innehåller ogiltiga tecken";
                 return false;
             }
-            var_dump('3');
+
         }
 
         return true;
     }
 
-    public function validateEditArticle() {}
+    public function validateEditArticle($name,$desc,$price) {
+
+        if(strlen($name) < 2){
+            echo "Användarenamet är för kort. Minst 2 tecken";
+            return false;
+        }
+
+        if(strlen($desc) < 10){
+            echo "Det måste finnas en beskrivning av produkten";
+            return false;
+        }
+
+        if($price = "" || $price < 1){
+            echo "Ange ett pris";
+            return false;
+        }
+
+        if($name != strip_tags($name)) {
+            $this->username = strip_tags($name);
+            echo "Användarnamnet innehåller ogiltiga tecken";
+            return false;
+        }
+        return true;
+    }
 
     public function validateAddCategory($name,$image) {
 

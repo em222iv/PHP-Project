@@ -81,6 +81,6 @@ class ControllerClass {
         }
         $this->productController->productControll();
 
-        return $this->view->form();
+        return $this->view->productForm();
     }
 }

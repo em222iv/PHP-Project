@@ -11,9 +11,6 @@ require_once("DBConnectionRepository.php");
 class AdminRepository{
 
     protected $dbTable;
-    private $categories;
-    private $image;
-    private $categoryObject;
 
     private $dbConnection;
 
@@ -22,13 +19,19 @@ class AdminRepository{
     }
 
 
-    //Categrory SQL section
+    //add section
     public function addCategoryToDB($name,$image) {
 
         $db = $this->dbConnection->connectdb();
 
 
-        $data = addslashes(file_get_contents ($image['tmp_name']));
+       // $data = addslashes(file_get_contents ($image['tmp_name']));
+
+        $tmpName = $image['tmp_name'];
+
+        $fp = fopen($tmpName, 'r');
+        $data = fread($fp, filesize($tmpName));
+        fclose($fp);
 
         $sql = "INSERT INTO categories (c_name,img) VALUES (:c_name,:img)";
         $q = $db->prepare($sql);
@@ -60,7 +63,11 @@ class AdminRepository{
 
         $db = $this->dbConnection->connectdb();
 
-        $data = addslashes(file_get_contents ($image['tmp_name']));
+        $tmpName = $image['tmp_name'];
+
+        $fp = fopen($tmpName, 'r');
+        $data = fread($fp, filesize($tmpName));
+        fclose($fp);
 
         $sql = "INSERT INTO $category (a_name,a_description,a_price,img) VALUES (:a_name,:a_description,:a_price,:img)";
         $q = $db->prepare($sql);
@@ -72,38 +79,36 @@ class AdminRepository{
     }
 
 
+    //edit section
+
     public function addEditedCategoryToDB($db_c_name,$c_name,$image) {
 
         $db = $this->dbConnection->connectdb();
-        //try {
+        try {
             if($this->doesCategoryExist($c_name)){
 
+                $tmpName = $image['tmp_name'];
 
-                $data = addslashes(file_get_contents ($image['tmp_name']));
+                $fp = fopen($tmpName, 'r');
+                $data = fread($fp, filesize($tmpName));
+                fclose($fp);
+
                  $sql = "UPDATE categories
                          SET c_name =?, img = ?
                          WHERE c_name = ?";
                 $q = $db->prepare($sql);
                 $q->execute(array($c_name,$data,$db_c_name));
-
-
-
-
-
-
             }
 
-
-        /*} catch (Exception $e) {
+        } catch (Exception $e) {
             echo "couldnt update category";
             return false;
-        }*/
+        }
 
         if($this->editArticleTable($db_c_name,$c_name)) {
 
             return true;
         }
-
 
     }
     public function editArticleTable($db_c_name,$c_name) {
@@ -121,7 +126,36 @@ class AdminRepository{
         return true;
     }
 
+    public function addEditedArticleToDB($db_c_name,$db_a_name,$a_name,$a_desc,$a_price,$image) {
+        $table = $db_c_name;
 
+        $db = $this->dbConnection->connectdb();
+        try {
+
+            if($this->doesArticleExist($a_name)){
+
+                $tmpName = $image['tmp_name'];
+
+                $fp = fopen($tmpName, 'r');
+                $data = fread($fp, filesize($tmpName));
+                fclose($fp);
+
+                $sql = "UPDATE $table
+                         SET a_name = ?,a_description = ?,a_price = ?, img = ?
+                         WHERE a_name = ?";
+                $q = $db->prepare($sql);
+                $q->execute(array($a_name,$a_desc,$a_price,$data,$db_a_name));
+            }
+
+        } catch (Exception $e) {
+            echo "couldnt update article";
+            return false;
+        }
+    return true;
+
+    }
+
+    //getters from database
     public function doesCategoryExist($c_name) {
 
         $db = $this->dbConnection->connectdb();
@@ -133,27 +167,8 @@ class AdminRepository{
             return false;
         }
         return true;
-
     }
 
-    public function getAllCategories(){
-
-        $db = $this->dbConnection->connectdb();
-
-        $sql = "SELECT * FROM categories";
-        $sth = $db->prepare($sql);
-        $sth->execute();
-
-        $result = $sth->fetchAll();
-
-        return $result;
-
-    }
-
-
-
-
-    //Article SQL section
     public function doesArticleExist($a_name) {
 
         $db = $this->dbConnection->connectdb();
@@ -167,10 +182,30 @@ class AdminRepository{
         if($results->rowCount()>0){echo 'table exists'; return false;}
         return true;
     }
+    public function getAllCategories(){
 
+        $db = $this->dbConnection->connectdb();
 
+        $sql = "SELECT * FROM categories";
+        $sth = $db->prepare($sql);
+        $sth->execute();
 
+        $result = $sth->fetchAll();
 
+        return $result;
+    }
 
+    public function getCategoryArticles($c_name){
+        $name = $c_name;
+        $db = $this->dbConnection->connectdb();
+
+        $sql = "SELECT * FROM $name";
+        $sth = $db->prepare($sql);
+        $sth->execute(array($c_name));
+
+        $result = $sth->fetchAll();
+
+        return $result;
+    }
 }
 

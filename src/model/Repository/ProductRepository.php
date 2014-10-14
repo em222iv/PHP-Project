@@ -11,7 +11,7 @@ class productRepository{
 
     protected $dbTable;
     private $categories;
-    private $image;
+    private $array;
     private $categoryObject;
 
     private $dbConnection;
@@ -22,28 +22,34 @@ class productRepository{
     }
 
     //PDO connection
-    public function importCategories() {
+    public function getAllCategories() {
+
 
         $db = $this->dbConnection->connectdb();
 
         $sql = "SELECT * FROM categories";
-        $params = array($this->categories);
+        $sth = $db->prepare($sql);
+        $sth->execute();
 
-        $query = $db -> prepare($sql);
-        $query -> execute($params);
+        $result = $sth->fetchAll();
 
-        $result = $query -> fetch();
-
-        //hämta hem object från databas
-        //ta emot i model och loopa ut till array
-        //sätt in html till bild och skriv ut i productview
-        $this->categories = $query->fetchAll();
-
-
-        return true;
+        return $result;
     }
     public function getCategories(){
         return $this->categories;
 
+    }
+
+    public function getArticlesFromChosenCategory($category) {
+        $cat = $category;
+        $db = $this->dbConnection->connectdb();
+
+        $sql = "SELECT * FROM $cat";
+        $sth = $db->prepare($sql);
+        $sth->execute();
+
+        $result = $sth->fetchAll();
+
+        return $result;
     }
 }
