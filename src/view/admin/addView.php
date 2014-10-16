@@ -66,13 +66,6 @@ class AddView {
         return false;
     }
 
-    //get Image
-
-
-
-
-
-
     //Add menu section
     function addMenu() {
         if(isset($_GET['add'])) {

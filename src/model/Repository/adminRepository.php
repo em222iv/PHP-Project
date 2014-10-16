@@ -22,6 +22,7 @@ class AdminRepository{
     //add section
     public function addCategoryToDB($name,$image) {
 
+        var_dump($name);
         $db = $this->dbConnection->connectdb();
 
 
@@ -44,7 +45,8 @@ class AdminRepository{
         }
     }
     public function createArticleTable($name) {
-
+        //table tar inte emot ÅÄÖ
+        var_dump($name);
         $db = $this->dbConnection->connectdb();
 
         $sql = "CREATE TABLE IF NOT EXISTS $name (
@@ -54,6 +56,7 @@ class AdminRepository{
                 a_price DOUBLE NOT NULL,
                 img LONGBLOB NOT NULL
             )";
+
         $sq = $db->query($sql);
 
         return true;
@@ -155,6 +158,33 @@ class AdminRepository{
 
     }
 
+    // DELETE SECTION
+    public function deleteCategory($category) {
+        $categoryTable = $category;
+        $db = $this->dbConnection->connectdb();
+
+        $sql = "DELETE FROM categories WHERE c_name =  :c_name";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':c_name',$category, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $sql = "DROP TABLE $categoryTable";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        return true;
+    }
+    public function deleteArticle($articleTable,$article) {
+        var_dump($article);
+        $db = $this->dbConnection->connectdb();
+
+        $sql = "DELETE FROM $articleTable WHERE a_name =  :a_name";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':a_name',$article, PDO::PARAM_STR);
+        $stmt->execute();
+
+        return true;
+    }
+
     //getters from database
     public function doesCategoryExist($c_name) {
 
@@ -196,12 +226,13 @@ class AdminRepository{
     }
 
     public function getCategoryArticles($c_name){
+        var_dump($c_name);
         $name = $c_name;
         $db = $this->dbConnection->connectdb();
 
         $sql = "SELECT * FROM $name";
         $sth = $db->prepare($sql);
-        $sth->execute(array($c_name));
+        $sth->execute();
 
         $result = $sth->fetchAll();
 

@@ -89,4 +89,16 @@ class AdminModel{
 
         return true;
     }
+
+    public function storeCategory($category) {
+        return $_SESSION['category'] = $category;
+    }
+    public function getStoreCategory() {
+        return $_SESSION['category'];
+    }
+    public function replaceWhiteSpace($name) {
+
+        return $name = preg_replace('/\s+/', '', $name);
+    }
+
 }

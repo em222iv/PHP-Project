@@ -21,6 +21,7 @@ class HTMLView {
                     <script src=/js/vendor/jquery.js></script>
                     <script src=/js/foundation/foundation.js></script>
 
+
                   <!--  <script>
                           $(document).ready(function(){
                           $(document).foundation();
@@ -73,7 +74,7 @@ class HTMLView {
                       <div class='large-12 columns'>
                           <div class=slider>
                               <img src='http://placehold.it/1000x250&text=Badly stuffed Lols'>
-                              <!--<img src='/pics/gif.gif'>-->
+                              <!--<img src='/pics/header.jpg'>-->
                           </div>
                           <hr/>
 

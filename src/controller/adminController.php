@@ -11,6 +11,11 @@ class AdminController{
     private $adminView;
     private $addView;
     private $editView;
+    private $deleteView;
+
+    private $categories;
+    private $articles;
+    private $choosenCategoryName;
 
     private $chosenCategory;
     private $chosenArticle;
@@ -35,8 +40,8 @@ class AdminController{
     private $adminRepository;
 
 
-    public function __construct( $loginController, adminView $adminView, AddView $addView,  $adminController, EditView $editView, AdminModel $adminModel, AdminRepository $adminRepository) {
-
+    public function __construct($loginController,deleteView $deleteView, adminView $adminView, AddView $addView,  $adminController, EditView $editView, AdminModel $adminModel, AdminRepository $adminRepository) {
+        $this->deleteView = $deleteView;
         $this->adminModel = $adminModel;
         $this->adminRepository = $adminRepository;
         $this->adminView =  $adminView;
@@ -48,30 +53,14 @@ class AdminController{
 
 
     }
-    //check what page user is on
-    //fullösning, måste göra bättre paging kontroll
+
     public function adminControll() {
-        if($this->adminView->getAdmin() || $this->adminView->getLogged() || $this->addView->addCategory() || $this->addView->addArticle() || $this->addView->addMenu() || $this->editView->editCategory() || $this->editView->editArticle() || $this->editView->editMenu() || $this->addView->addCategoryConfirm() || $this->addView->addArticleConfirm()  || $this->editView->editCategoryConfirm()  || $this->editView->getEditArticleCategory() || $this->editView->editArticleConfirm()){
 
-            return true;
-        }
-        return false;
-    }
-
-    public function addPaging() {
-
-    }
-    public function editPaging() {
-
-    }
-
-
-    public function addControll() {
 
         //Add section
         if($this->addView->addCategoryConfirm()){
 
-            $this->addCategoryName = $this->addView->getAddCategoryName();
+            $this->addCategoryName = $this->adminModel->replaceWhiteSpace($this->addView->getAddCategoryName());
 
             if($this->addView->validateImage()){
 
@@ -89,7 +78,7 @@ class AdminController{
         if($this->addView->addArticleConfirm()){
 
             $this->chosenCategory = $this->addView->getChosenCategory();
-            $this->addArticleName = $this->addView->getAddArticleName();
+            $this->addArticleName = $this->adminModel->replaceWhiteSpace($this->addView->getAddArticleName());
             $this->addArticleDesc = $this->addView->getAddArticleDesc();
             $this->addArticlePrice = $this->addView->getAddArticlePrice();
 
@@ -112,7 +101,7 @@ class AdminController{
         if($this->editView->editCategoryConfirm()){
 
             $this->chosenCategory = $this->editView->dropdownCategoryChoice();
-            $this->editCategoryName = $this->editView->getEditCategoryName();
+            $this->editCategoryName = $this->adminModel->replaceWhiteSpace($this->editView->getEditCategoryName());
 
             if($this->editView->validateImage()){
 
@@ -128,34 +117,74 @@ class AdminController{
         if($this->editView->editArticle())  {
             //hämta ut den rätta kategorin
 
-            $_SESSION['DDC'] = $this->editView->dropdownCategoryChoice();
+            $this->adminModel->storeCategory($this->editView->dropdownCategoryChoice());
 
             $this->chosenCategory = $this->editView->dropdownCategoryChoice();
             $this->editView->setArticles($this->adminRepository->getCategoryArticles($this->chosenCategory));
-
-
         }
         if($this->editView->editArticleConfirm()){
-                $this->chosenCategory = $_SESSION['DDC'];
-                $this->chosenArticle = $this->editView->dropdownArticleChoice();
-                $this->editArticleName = $this->editView->getEditArticleName();
-                $this->editArticleDesc = $this->editView->getEditArticleDesc();
-                $this->editArticlePrice = $this->editView->getEditArticlePrice();
+            $this->chosenCategory = $this->adminModel->getStoreCategory();
+            $this->chosenArticle = $this->editView->dropdownArticleChoice();
+            $this->editArticleName = $this->adminModel->replaceWhiteSpace($this->editView->getEditArticleName());
+            $this->editArticleDesc = $this->editView->getEditArticleDesc();
+            $this->editArticlePrice = $this->editView->getEditArticlePrice();
 
-                if($this->editView->validateImage()){
+            if($this->editView->validateImage()){
 
-                    //if picture validates, set image variable for database
-                    $this->editArticleImage = $this->editView->getImage();
+                //if picture validates, set image variable for database
+                $this->editArticleImage = $this->editView->getImage();
 
-                    if($this->adminModel->validateEditArticle($this->editArticleName,$this->editArticleDesc,$this->editArticlePrice)) {
+                if($this->adminModel->validateEditArticle($this->editArticleName,$this->editArticleDesc,$this->editArticlePrice)) {
 
-                        $this->adminRepository->addEditedArticleToDB($this->chosenCategory,$this->chosenArticle,$this->editArticleName,$this->editArticleDesc,$this->editArticlePrice,$this->editArticleImage);
-                    }
+                    $this->adminRepository->addEditedArticleToDB($this->chosenCategory,$this->chosenArticle,$this->editArticleName,$this->editArticleDesc,$this->editArticlePrice,$this->editArticleImage);
                 }
             }
+        }
 
 
+        if($this->deleteView->deleteCategory() || $this->deleteView->chooseCategory()){
+            $this->categories=$this->adminRepository->getAllCategories();
+            $this->deleteView->setCategories($this->categories);
+        }
+        if($this->deleteView->deleteCategoryConfirm()){
+            $this->deleteCategoryName = $this->deleteView->getDeleteCategoryName();
+            $this->adminRepository->deleteCategory($this->deleteCategoryName);
+        }
+        if($this->deleteView->deleteArticle()){
+            $this->choosenCategoryName = $this->deleteView->getChoosenCategory();
+            $this->adminModel->storeCategory($this->choosenCategoryName);
+            $this->articles = $this->adminRepository->getCategoryArticles($this->choosenCategoryName);
+            $this->deleteView->setCategories($this->articles);
+        }
+        if($this->deleteView->deleteArticleConfirm()){
 
+            $this->categories = $this->adminModel->getStoreCategory();
+            $this->chosenArticle = $this->deleteView->articleDropdown();
+            $this->adminRepository->deleteArticle($this->categories,$this->chosenArticle);
+        }
+
+
+        //delete
+        if($this->deleteView->delete()){
+            return $this->deleteView->deleteMenuForm();
+        }
+
+        if($this->deleteView->chooseCategory()){
+            return $this->deleteView->chooseCategoryForm();
+        }
+        if($this->deleteView->deleteArticle()) {
+            return $this->deleteView->deleteArticleForm();
+
+        }
+
+        if($this->deleteView->deleteCategory()){
+            return $this->deleteView->deleteCategoryForm();
+        }
+
+        if($this->deleteView->deleteCategoryConfirm() || $this->deleteView->deleteArticleConfirm()){
+            return $this->deleteView->deleteMenuForm();
+        }
+        //add
         if($this->addView->addArticle()){
             return $this->addView->addArticleForm();
         }
@@ -165,6 +194,7 @@ class AdminController{
         if($this->addView->addCategory()){
             return $this->addView->addCategoryForm();
         }
+        //edit
         if($this->editView->editArticle()){
             return $this->editView->editArticleForm();
         }
@@ -184,6 +214,6 @@ class AdminController{
             return $this->addView->addForm();
         }
 
-        return $this->adminView->loggedInForm();
+        if($this->adminView->getAdmin() || $this->adminView->getLogged()){return $this->adminView->loggedInForm();}
     }
 }

@@ -36,7 +36,7 @@ class loginController{
 
         //login if session exist
         if($this->loginModel->loginSESSIONExist()){
-            return $this->adminController->addControll();
+            return $this->adminController->adminControll();
         }
 
         //login verification -> logged in
@@ -52,8 +52,8 @@ class loginController{
                     return $this->adminView->loggedInForm();
                 }
             }
+
         }
-        //fixa url till ?admin
-        return $this->adminView->loginForm();
+        if($this->adminView->getAdmin()){return $this->adminView->loginForm();}
     }
 }

@@ -24,18 +24,17 @@ class loginModel{
         $this->db_username = $this->loginRepository->getDBUsername();
         $this->db_password = $this->loginRepository->getDBPassword();
 
-       /*if($username !== $this->db_username && $password == $this->db_password ||
+       if($username !== $this->db_username && $password == $this->db_password ||
             $username == $this->db_username && $password !== $this->db_password ||
             $username !== $this->db_username && $password !== $this->db_password){
 
             $this->errorMessage = "";
             return false;
-        }*/
+        }
 
         if($username == "" || $password == "" || $this->db_username == "" || $this->db_password == ""){
             $this->errorMessage = "You can't leave fields empty";
             return false;
-
         }
 
         if($password == $this->db_password);

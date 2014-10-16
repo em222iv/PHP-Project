@@ -58,6 +58,7 @@ class adminView {
         }
         return false;
     }
+
     function logout() {
         if(isset($_POST['logoutButton'])) {
             return true;
@@ -104,7 +105,8 @@ public function loggedInForm() {
                     <h3>Administrator</h3>
                     <a href='?add' class='button expand'>ADD</a>
                     <a href='?edit' class='button expand'>EDIT</a>
-                    <input type='submit' class='button expand' name='logoutButton' value='LOGOUT'>
+                    <a href='?delete' class='button expand'>DELETE</a>
+                    <input type='submit' class='button expand alert' name='logoutButton' value='LOGOUT'>
                     </div>
                 </div>
             </form>

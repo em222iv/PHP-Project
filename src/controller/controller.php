@@ -9,6 +9,7 @@ require_once("././src/view/productView.php");
 require_once("././src/view/admin/adminView.php");
 require_once("././src/view/admin/addView.php");
 require_once("././src/view/admin/editView.php");
+require_once("././src/view/admin/deleteView.php");
 require_once("././src/view/checkoutView.php");
 
 require_once("././src/model/productModel.php");
@@ -40,6 +41,7 @@ class ControllerClass {
     private $adminController;
     private $adminModel;
     private $adminRepository;
+    private $deleteView;
 
     public function __construct() {
         $this->checkoutView = new checkoutView();
@@ -47,33 +49,28 @@ class ControllerClass {
         $this->adminView = new adminView();
         $this->addView = new AddView();
         $this->editView = new EditView();
+        $this->deleteView = new DeleteView();
 
 
         $this->productRepository = new ProductRepository();
         $this->productModel = new productModel();
         $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository);
 
-
-
         $this->adminRepository = new AdminRepository();
         $this->adminModel = new AdminModel($this->adminRepository);
-        $this->adminController = new AdminController($this->loginController, $this->adminView, $this->addView, $this->adminController, $this->editView,$this->adminModel,$this->adminRepository);
+        $this->adminController = new AdminController($this->loginController,$this->deleteView, $this->adminView, $this->addView, $this->adminController, $this->editView,$this->adminModel,$this->adminRepository);
 
         $this->loginRepository = new loginRepository();
         $this->loginModel = new loginModel($this->loginRepository);
         $this->loginController = new loginController($this->loginModel, $this->loginRepository,$this->adminView, $this->adminController);
-
-
-
-    }
-    //direct errormessages from model to view
-    function errorMSGHandler() {
     }
 
     public function formControll() {
 
-        if($this->adminController->adminControll()){
-            return $this->loginController->loginControll();
+        $admincontroll = $this->loginController->loginControll();
+        if($admincontroll != null){
+
+            return $admincontroll;
         }
 
         if($this->checkoutView->checkoutClicked()){

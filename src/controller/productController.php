@@ -15,6 +15,7 @@ class productController{
     private $categories;
     private $category;
     private $articles;
+    private $article;
 
 
     public function __construct(productModel $productModel,  adminView $adminView, viewClass $viewClass, productRepository $productRepository) {
@@ -26,16 +27,34 @@ class productController{
 
     public function productControll() {
         $this->categories =$this->productRepository->getAllCategories();
-        //$this->productModel->categories($this->productRepository->getCategories());
-        $this->productView->setProducts($this->categories);
+        $this->productView->setCategories($this->categories);
 
 
-        $this->category = $this->productView->getChosenCategory();
+
+
+
+
+
         if($this->productView->getArticles()){
-            var_dump('2');
+            $this->productModel->storeCategory($this->productView->getChosenCategory());
+            $this->category = $this->productModel->getStoredCategory();
 
-        $this-> articles = $this->productRepository->getArticlesFromChosenCategory($this->category);
+            $this->articles = $this->productRepository->getArticlesFromChosenCategory($this->category);
+            $this->productView->setArticles($this->articles);
 
         }
+        if($this->productView->getArticleInfo()){
+            $this->category = $this->productModel->getStoredCategory();
+            $this->article = $this->productView->getChosenArticle();
+
+
+            $this->article = $this->productRepository->getArticleInfo($this->article,$this->category);
+
+            $this->productView->setArticleInfo($this->article);
+
+
+
+        }
+
     }
 }

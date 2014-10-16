@@ -41,14 +41,29 @@ class productRepository{
     }
 
     public function getArticlesFromChosenCategory($category) {
-        $cat = $category;
+        $categoryname = $category;
         $db = $this->dbConnection->connectdb();
-
-        $sql = "SELECT * FROM $cat";
+        var_dump($categoryname);
+        $sql = "SELECT * FROM $categoryname";
         $sth = $db->prepare($sql);
         $sth->execute();
 
         $result = $sth->fetchAll();
+
+        return $result;
+    }
+
+    public function getArticleInfo($article,$category) {
+
+        $a = $article;
+        $c = $category;
+        $db = $this->dbConnection->connectdb();
+
+        $sql = "SELECT * FROM $c WHERE a_name =  :a_name";
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':a_name',$a, PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->fetchAll();
 
         return $result;
     }

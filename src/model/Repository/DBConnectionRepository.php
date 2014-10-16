@@ -8,15 +8,15 @@
 
 class DBConnectionRepository {
 
-      protected $dbUsername = 'root';
-       protected $dbPassword = 'root';
-       protected $dbConnstring = 'mysql:host=localhost;dbname=webshop';
-       protected $dbConnection;
-     /*  protected $dbUsername = 'eerie_se';
+    protected $dbUsername = 'root';
+     protected $dbPassword = 'root';
+     protected $dbConnstring = 'mysql:host=localhost;dbname=webshop';
+     protected $dbConnection;
+       /*protected $dbUsername = 'eerie_se';
        protected $dbPassword = 'NyUYN8xk';
        protected $dbConnstring = 'mysql:host=eerie.se.mysql;dbname=eerie_se';
        protected $dbConnection;*/
-    //PDO connection
+        //PDO connection
     public function connectdb(){
 
         if ($this->dbConnection == NULL)
