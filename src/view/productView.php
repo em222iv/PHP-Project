@@ -206,6 +206,7 @@ class viewClass {
                     <div class='row'>
                         <div class='large-12 columns'>
                         <a href='#' class='tiny button expand'>Put into Cart</a>
+
                     </div>
                 </div>
               </div>
