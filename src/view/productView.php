@@ -16,7 +16,7 @@ class viewClass {
     private $category;
     private $articles;
     private $article;
-
+    private $editArticle;
     function __construct() {
         $this->productModel = new productModel();
     }
@@ -33,6 +33,12 @@ class viewClass {
     public function setArticleInfo($db_article) {
         $this->article = $db_article;
 
+    }
+    public function setEditArticleInfo() {
+        $this->editArticle = array("true");
+    }
+    public function unsetEditArray() {
+        $this->editArticle = array();
     }
 
 
@@ -186,22 +192,24 @@ class viewClass {
         }
         return false;
     }
+
+
+
     public function articleInfoForm() {
-         $articleName = $this->article[0][1];
-         $articleDesc = $this->article[0][2];
-         $articlePrice = $this->article[0][3];
-         $articleImage = $this->article[0][4];
+
+        $articleName = $this->article[0][1];
+        $articleDesc = $this->article[0][2];
+        $articlePrice = $this->article[0][3];
+        $articleImage = $this->article[0][4];
         $img = '<img src="data:image/png;base64,'.base64_encode($articleImage).'">';
 
-
-
         $ret = "
-                 <div class='large-3 panel columns'>
+
+             <div class='large-3 panel columns'>
                  <fieldset>
                     $img
-                    </fieldset>
                     <h5>Name: $articleName</h5>
-                    <h5>Price: $articlePrice</h5>
+                    <h5>Price: $articlePrice sek</h5>
                     <hr>
                     <div class='row'>
                         <div class='large-12 columns'>
@@ -216,6 +224,8 @@ class viewClass {
                         <h5>Description</h5><hr>
                         <p>$articleDesc</p>
                     </div>
+                </div>
+
         ";
         return $ret;
     }

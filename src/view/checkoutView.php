@@ -21,7 +21,6 @@ class checkoutView {
 
         $ret = "
         <form>
-
             <div class='row'>
                 <div class='large-3 columns'>
                   <label>First name

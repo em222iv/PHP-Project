@@ -43,25 +43,27 @@ class ControllerClass {
     private $adminRepository;
     private $deleteView;
 
+
     public function __construct() {
+
         $this->checkoutView = new checkoutView();
-        $this->view = new ViewClass();
+        $this->view = new viewClass();
+
         $this->adminView = new adminView();
         $this->addView = new AddView();
         $this->editView = new EditView();
         $this->deleteView = new DeleteView();
 
-
+        $this->loginRepository = new loginRepository();
+        $this->loginModel = new loginModel($this->loginRepository);
         $this->productRepository = new ProductRepository();
         $this->productModel = new productModel();
-        $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository);
+        $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository,$this->loginModel);
 
         $this->adminRepository = new AdminRepository();
         $this->adminModel = new AdminModel($this->adminRepository);
-        $this->adminController = new AdminController($this->loginController,$this->deleteView, $this->adminView, $this->addView, $this->adminController, $this->editView,$this->adminModel,$this->adminRepository);
 
-        $this->loginRepository = new loginRepository();
-        $this->loginModel = new loginModel($this->loginRepository);
+        $this->adminController = new AdminController($this->loginController,$this->deleteView, $this->adminView, $this->addView, $this->adminController, $this->editView,$this->adminModel,$this->adminRepository,$this->view);
         $this->loginController = new loginController($this->loginModel, $this->loginRepository,$this->adminView, $this->adminController);
     }
 

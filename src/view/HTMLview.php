@@ -1,4 +1,4 @@
-<?php
+<link rel=stylesheet href=css/foundation-icons.css /><?php
 /**
  * Created by PhpStorm.
  * User: erikmagnusson
@@ -17,6 +17,7 @@ class HTMLView {
                     <title>Webshop | Welcome</title>
                     <link rel=stylesheet href='css/foundation.css' />
                     <link rel=stylesheet href=css/foundation-icons.css />
+                    <link rel=stylesheet href=css/style.css />
                     <script src=/js/vendor/modernizr.js></script>
                     <script src=/js/vendor/jquery.js></script>
                     <script src=/js/foundation/foundation.js></script>

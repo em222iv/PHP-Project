@@ -6,6 +6,7 @@
  * Time: 17:06
  */
 
+
 class AdminController{
     private $loginController;
     private $adminView;
@@ -39,8 +40,11 @@ class AdminController{
     private $adminModel;
     private $adminRepository;
 
+    private $productView;
 
-    public function __construct($loginController,deleteView $deleteView, adminView $adminView, AddView $addView,  $adminController, EditView $editView, AdminModel $adminModel, AdminRepository $adminRepository) {
+
+
+    public function __construct($loginController,deleteView $deleteView, adminView $adminView, AddView $addView, $adminController, EditView $editView, AdminModel $adminModel, AdminRepository $adminRepository, viewClass $productView) {
         $this->deleteView = $deleteView;
         $this->adminModel = $adminModel;
         $this->adminRepository = $adminRepository;
@@ -49,7 +53,7 @@ class AdminController{
         $this->addView = $addView;
         $this->editView = $editView;
         $this->adminController = $adminController;
-
+        $this->productView = $productView;
 
 
     }
@@ -58,6 +62,7 @@ class AdminController{
 
 
         //Add section
+        //add category
         if($this->addView->addCategoryConfirm()){
 
             $this->addCategoryName = $this->adminModel->replaceWhiteSpace($this->addView->getAddCategoryName());
@@ -67,16 +72,17 @@ class AdminController{
                 $this->addCategoryImage = $this->addView->getImage();
 
 
-                if($this->adminModel->validateAddCategory($this->addCategoryName,$this->addCategoryImage)) {
+                if($this->adminModel->validateAddorEditContent($this->addCategoryName)) {
 
                         $this->adminRepository->addCategoryToDB($this->addCategoryName,$this->addCategoryImage);
                 }
             }
         }
 
+
+        //add category
         $this->addView->setCategories($this->adminRepository->getAllCategories());
         if($this->addView->addArticleConfirm()){
-
             $this->chosenCategory = $this->addView->getChosenCategory();
             $this->addArticleName = $this->adminModel->replaceWhiteSpace($this->addView->getAddArticleName());
             $this->addArticleDesc = $this->addView->getAddArticleDesc();
@@ -87,7 +93,7 @@ class AdminController{
                 //if picture validates, set image variable for database
                 $this->addArticleImage = $this->addView->getImage();
 
-                    if($this->adminModel->validateAddArticle($this->addArticleName,$this->addArticleDesc,$this->addArticlePrice)) {
+                    if($this->adminModel->validateAddorEditContent($this->addArticleName,$this->addArticleDesc,$this->addArticlePrice)) {
 
                         $this->adminRepository->addArticleToDB($this->chosenCategory,$this->addArticleName,$this->addArticleDesc,$this->addArticlePrice,$this->addArticleImage);
                 }
@@ -96,51 +102,92 @@ class AdminController{
 
 
 
+
+
+
+
+
         //Edit section
-        $this->editView->setCategories($this->adminRepository->getAllCategories());
+        //edit category
+        $this->categories = $this->adminRepository->getAllCategories();
+        $this->editView->setCategories($this->categories);
+        if($this->editView->editCategory()){
+
+            $this->adminModel->storeCategory($this->editView->dropdownCategoryChoice());
+            $this->chosenCategory = $this->adminModel->getStoredCategory();
+            var_dump($this->chosenCategory);
+
+
+            $this->editView->setCategory($this->adminRepository->getCategoryInfo($this->chosenCategory));
+
+            return $this->editView->editCategoryForm();
+        }
         if($this->editView->editCategoryConfirm()){
+            $this->chosenCategory = $this->adminModel->getStoredCategory();
+            $this->editCategoryName = $this->adminModel->replaceWhiteSpace($this->editView->editCategoryName());
 
-            $this->chosenCategory = $this->editView->dropdownCategoryChoice();
-            $this->editCategoryName = $this->adminModel->replaceWhiteSpace($this->editView->getEditCategoryName());
+            if($this->editView->getEditImage()) {
+                if($this->editView->validateImage()){
 
-            if($this->editView->validateImage()){
-
-                $this->editCategoryImage = $this->editView->getImage();
-                //kolla ifall namnet redan finns?
-                if($this->adminModel->validateEditCategory($this->editCategoryName)) {
-
-                    $this->adminRepository->addEditedCategoryToDB($this->chosenCategory,$this->editCategoryName,$this->editCategoryImage);
+                    $this->editArticleImage = $this->editView->getImage();
+                    $this->adminRepository->newCategoryPicture($this->chosenCategory,$this->editArticleImage);
                 }
+            }
+            if($this->adminModel->validateAddorEditContent($this->editCategoryName)) {
+                $this->adminRepository->addEditedCategoryToDB($this->chosenCategory,$this->editCategoryName);
             }
         }
 
-        if($this->editView->editArticle())  {
-            //hämta ut den rätta kategorin
 
+        //edit article
+        if($this->editView->chooseArticle())  {
             $this->adminModel->storeCategory($this->editView->dropdownCategoryChoice());
 
             $this->chosenCategory = $this->editView->dropdownCategoryChoice();
+
             $this->editView->setArticles($this->adminRepository->getCategoryArticles($this->chosenCategory));
         }
+
+        if($this->editView->editArticle()){
+            unset($_FILES['file']);
+            $this->chosenCategory = $this->adminModel->getStoredCategory();
+
+            $this->adminModel->storeArticle($this->editView->dropdownArticleChoice());
+            $this->chosenArticle = $this->adminModel->getStoredArticle();
+            $this->editView->setArticle($this->adminRepository->getArticleInfo($this->chosenArticle,$this->chosenCategory));
+
+            return $this->editView->editArticleForm();
+            exit();
+        }
+
         if($this->editView->editArticleConfirm()){
-            $this->chosenCategory = $this->adminModel->getStoreCategory();
-            $this->chosenArticle = $this->editView->dropdownArticleChoice();
+            $this->chosenCategory = $this->adminModel->getStoredCategory();
+            $this->chosenArticle = $this->adminModel->getStoredArticle();
+
             $this->editArticleName = $this->adminModel->replaceWhiteSpace($this->editView->getEditArticleName());
             $this->editArticleDesc = $this->editView->getEditArticleDesc();
             $this->editArticlePrice = $this->editView->getEditArticlePrice();
 
-            if($this->editView->validateImage()){
 
-                //if picture validates, set image variable for database
-                $this->editArticleImage = $this->editView->getImage();
+            if($this->editView->getEditImage()) {
+                if($this->editView->validateImage()){
 
-                if($this->adminModel->validateEditArticle($this->editArticleName,$this->editArticleDesc,$this->editArticlePrice)) {
+                    $this->editArticleImage = $this->editView->getImage();
 
-                    $this->adminRepository->addEditedArticleToDB($this->chosenCategory,$this->chosenArticle,$this->editArticleName,$this->editArticleDesc,$this->editArticlePrice,$this->editArticleImage);
+                    $this->adminRepository->newArticlePicture($this->chosenCategory,$this->chosenArticle,$this->editArticleImage);
                 }
+            }
+
+            if($this->adminModel->validateAddorEditContent($this->editArticleName,$this->editArticleDesc,$this->editArticlePrice)) {
+
+                $this->adminRepository->addEditedArticleToDB($this->chosenCategory, $this->chosenArticle, $this->editArticleName, $this->editArticleDesc, $this->editArticlePrice);
             }
         }
 
+
+
+
+        //DELETE SECTION
 
         if($this->deleteView->deleteCategory() || $this->deleteView->chooseCategory()){
             $this->categories=$this->adminRepository->getAllCategories();
@@ -158,7 +205,7 @@ class AdminController{
         }
         if($this->deleteView->deleteArticleConfirm()){
 
-            $this->categories = $this->adminModel->getStoreCategory();
+            $this->categories = $this->adminModel->getStoredCategory();
             $this->chosenArticle = $this->deleteView->articleDropdown();
             $this->adminRepository->deleteArticle($this->categories,$this->chosenArticle);
         }
@@ -174,16 +221,14 @@ class AdminController{
         }
         if($this->deleteView->deleteArticle()) {
             return $this->deleteView->deleteArticleForm();
-
         }
-
         if($this->deleteView->deleteCategory()){
             return $this->deleteView->deleteCategoryForm();
         }
-
         if($this->deleteView->deleteCategoryConfirm() || $this->deleteView->deleteArticleConfirm()){
             return $this->deleteView->deleteMenuForm();
         }
+
         //add
         if($this->addView->addArticle()){
             return $this->addView->addArticleForm();
@@ -194,18 +239,22 @@ class AdminController{
         if($this->addView->addCategory()){
             return $this->addView->addCategoryForm();
         }
+        if($this->addView->addArticleConfirm()){
+            return $this->addView->addArticleForm();
+        }
+
         //edit
-        if($this->editView->editArticle()){
-            return $this->editView->editArticleForm();
+        if($this->editView->chooseArticle()){
+            return $this->editView->chooseArticleForm();
         }
         if($this->editView->editArticleConfirm()){
             return $this->editView->editArticleCategoryForm();
         }
-        if($this->editView->editCategory()){
-            return $this->editView->editCategoryForm();
-        }
         if($this->editView->editMenu()){
             return $this->editView->editForm();
+        }
+        if($this->editView->editChooseCategory()){
+            return $this->editView->editChooseCategoryForm();
         }
         if($this->editView->getEditArticleCategory()){
             return $this->editView->editArticleCategoryForm();
