@@ -6,31 +6,31 @@
  * Time: 15:26
  */
 
+require_once("commonModel.php");
 class productModel{
 
-    private $array;
-  function categories($categories) {
-
-  }
-
-    public function getCategories(){
-        return $this->categories;
-
-    }
-    public function getCategoryArray(){
-        return $this->array;
-
-    }
+    private $commonModel;
     //unsetta session vid lämpligt tillfälle.Annars buggar den och kommer innehålla "webshop.kategori"
-
+    public function __construct(){
+        $this->commonModel = new CommonModel();
+    }
     public function storeCategory($category) {
-            $_SESSION['category'] = $category;
-
+            return $this->commonModel->storeCategory($category);
     }
     public function getStoredCategory() {
         if(isset($_SESSION['category'])){
-            return $_SESSION['category'];
+            return $this->commonModel->getStoredCategory();
         }
+    }
+    public function unsetUserSessions() {
+        unset($_SESSION['category']);
+    }
+    public function replaceSpaceWithChar($name) {
+        return $this->commonModel->replaceSpaceWithChar($name);
+    }
 
+    ///FIXA DETTTA
+    public function replaceCharWithSpace($names) {
+        return $this->commonModel->replaceCharWithSpace($names);
     }
 }

@@ -7,9 +7,11 @@
  */
 
 require_once("DBConnectionRepository.php");
+require_once("commonRepository.php");
 class productRepository{
 
     protected $dbTable;
+    private $commonRepository;
     private $categories;
     private $array;
     private $categoryObject;
@@ -18,53 +20,21 @@ class productRepository{
 
     public function __construct() {
         $this->dbConnection = new DBConnectionRepository();
-
+        $this->db = $this->dbConnection->connectdb();
+        $this->commonRepository = new CommonRepository();
     }
 
     //PDO connection
     public function getAllCategories() {
-
-
-        $db = $this->dbConnection->connectdb();
-
-        $sql = "SELECT * FROM categories";
-        $sth = $db->prepare($sql);
-        $sth->execute();
-
-        $result = $sth->fetchAll();
-
-        return $result;
-    }
-    public function getCategories(){
-        return $this->categories;
-
+        return $this->commonRepository->getAllCategories($this->db);
     }
 
     public function getArticlesFromChosenCategory($category) {
-        $categoryname = $category;
-        $db = $this->dbConnection->connectdb();
-        var_dump($categoryname);
-        $sql = "SELECT * FROM $categoryname";
-        $sth = $db->prepare($sql);
-        $sth->execute();
 
-        $result = $sth->fetchAll();
-
-        return $result;
+        return $this->commonRepository->getArticlesFromChosenCategory($this->db,$category);
     }
 
     public function getArticleInfo($article,$category) {
-
-        $a = $article;
-        $c = $category;
-        $db = $this->dbConnection->connectdb();
-
-        $sql = "SELECT * FROM $c WHERE a_name =  :a_name";
-        $stmt = $db->prepare($sql);
-        $stmt->bindParam(':a_name',$a, PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-
-        return $result;
+        return $this->commonRepository->getArticleInfo($this->db,$article,$category);
     }
 }

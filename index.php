@@ -13,7 +13,6 @@ date_default_timezone_set('Europe/Stockholm');
 require_once("src/view/HTMLview.php");
 require_once("src/controller/controller.php");
 
-
 $view = new HTMLView();
 $Controller = new ControllerClass();
 

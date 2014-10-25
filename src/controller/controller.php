@@ -24,6 +24,8 @@ require_once("productController.php");
 require_once("loginController.php");
 require_once("adminController.php");
 
+require_once("././src/view/errorHandler.php");
+
 
 class ControllerClass {
 
@@ -42,6 +44,7 @@ class ControllerClass {
     private $adminModel;
     private $adminRepository;
     private $deleteView;
+    private $errorHandler;
 
 
     public function __construct() {
@@ -50,12 +53,12 @@ class ControllerClass {
         $this->view = new viewClass();
 
         $this->adminView = new adminView();
-        $this->addView = new AddView();
-        $this->editView = new EditView();
-        $this->deleteView = new DeleteView();
+
+
 
         $this->loginRepository = new loginRepository();
         $this->loginModel = new loginModel($this->loginRepository);
+
         $this->productRepository = new ProductRepository();
         $this->productModel = new productModel();
         $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository,$this->loginModel);
@@ -63,15 +66,22 @@ class ControllerClass {
         $this->adminRepository = new AdminRepository();
         $this->adminModel = new AdminModel($this->adminRepository);
 
-        $this->adminController = new AdminController($this->loginController,$this->deleteView, $this->adminView, $this->addView, $this->adminController, $this->editView,$this->adminModel,$this->adminRepository,$this->view);
+
+        $this->addView = new AddView();
+        $this->editView = new EditView();
+        $this->deleteView = new DeleteView();
+        $this->errorHandler = new ErrorHandler($this->editView,$this->addView);
+
+        $this->adminController = new AdminController($this->loginController,$this->deleteView, $this->adminView, $this->addView, $this->adminController, $this->editView,$this->adminModel,$this->adminRepository,$this->view,$this->errorHandler);
         $this->loginController = new loginController($this->loginModel, $this->loginRepository,$this->adminView, $this->adminController);
+
+
     }
 
     public function formControll() {
 
         $admincontroll = $this->loginController->loginControll();
         if($admincontroll != null){
-
             return $admincontroll;
         }
 

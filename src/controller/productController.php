@@ -31,32 +31,31 @@ class productController{
 
     public function productControll() {
         $this->categories =$this->productRepository->getAllCategories();
-        $this->productView->setCategories($this->categories);
+        $this->productView->setCategories($this->productModel->replaceCharWithSpace($this->categories));
 
 
         if($this->productView->getArticles()){
-            $this->productModel->storeCategory($this->productView->getChosenCategory());
+            $this->productModel->storeCategory($this->productModel->replaceSpaceWithChar($this->productView->getChosenCategory()));
+
             $this->category = $this->productModel->getStoredCategory();
 
+
             $this->articles = $this->productRepository->getArticlesFromChosenCategory($this->category);
-            $this->productView->setArticles($this->articles);
+            $this->productView->setArticles($this->productModel->replaceCharWithSpace($this->articles));
 
         }
 
         if($this->productView->getArticleInfo()){
             $this->productView->unsetEditArray();
             if($this->loginModel->loginSESSIONExist()){
-
                 $this->productView->setEditArticleInfo();
             }
             $this->category = $this->productModel->getStoredCategory();
-            $this->article = $this->productView->getChosenArticle();
+            $this->article = $this->productModel->replaceSpaceWithChar($this->productView->getChosenArticle());
 
-
-            $this->article = $this->productRepository->getArticleInfo($this->article,$this->category);
+            $this->article = $this->productModel->replaceCharWithSpace($this->productRepository->getArticleInfo($this->article,$this->category));
 
             $this->productView->setArticleInfo($this->article);
-
         }
 
     }

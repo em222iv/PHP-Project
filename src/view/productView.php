@@ -25,6 +25,7 @@ class viewClass {
 
     }
     public function setCategories($db_categories) {
+
     $this->categories = $db_categories;
     }
     public function setArticles($db_articles) {
@@ -47,26 +48,33 @@ class viewClass {
         $ret = "<div class='large-12 small-12 columns'><a href=?><h4>Categories</h4></a></div>";
         foreach ($this->categories as $category) {
             $ret .= "<div class='large-3 small-6 columns'>";
-            $ret .= '<a href=?category='. $category[1] .'><img src=data:image/png;base64,'. base64_encode($category[2]) .'>';
-            $ret .= '<h6 class=panel> '. $category[1] .'</h6></div>';
+            $ret .= '<a href="?category='. $category[1] .'"><img alt="" src=data:image/png;base64,'. base64_encode($category[2]) .'></a>';
+            $ret .= '<h6 class=panel>'. $category[1] .'</h6></div>';
         }
         return $ret;
     }
 
 
     public function articleDropDownLoop(){
-        $ret = "";
+       $ret ="";
 
         if(isset($this->articles)){
-            $ret = "<div class='large-12 small-12 columns'><a href=?><h4>Articles - Back To Categories</h4></a></div>";
-            foreach ($this->articles as $article) {
-                $ret .= "<div class='large-3 small-6 columns'>";
-                $ret .= '<a href=?article='. $article[1] .'><img src=data:image/png;base64,'. base64_encode($article[4]) .'>';
-                $ret .= '<h6 class=panel> '. $article[1] .'</h6></div>';
-            }
 
+            if ($this->articles[0] >= 1) {
+                foreach ($this->articles as $article) {
+                    $ret .= "<div class='large-3 small-6 columns'>";
+                    $ret .= '<a href="?article='. $article[1] .'"><img  src=data:image/png;base64,'. base64_encode($article[4]) .' alt=""></a>';
+                    $ret .= '<h6 class=panel>'. $article[1] .'</h6></div>';
+                }
+                return $ret;
+            }else {
+                $ret = "<div class='large-12 small-8 columns'><a href=?><h4>Articles - Back To Categories</h4></a></div>";
+                $ret .= "<div class='large-12 small-6 columns'><h6 class=panel>No Articles Added Yet</h6></div>";
+                return $ret;
+                die();
+            }
         }
-        return $ret;
+
     }
 
     public function getChosenCategory() {
@@ -134,13 +142,13 @@ class viewClass {
                                           <h4>Cart</h4><hr/>
                                           <h5 class=subheader>This is your shoppingcart. Please mind your order to be correct.
                                           </h5>
-                                          <div class=show-for-small align=center>
+                                          <div class=show-for-small>
                                                 <a href=# class='small radius button expand'>Update cart</a><br>
                                                 <a href='?checkout' class='small radius button expand'>Continue to checkout</a>
                                           </div>
                                       </div>
                                      <div class='large-6 small-6 columns'>
-                                        <div id='products'>
+                                        <div class='products'>
                                             <div class='large-4 small-8 columns' ><a href='#'>BirdieBoo</a></div><br>
                                             <div class='large-1 small-3 columns'><a href='#'><span title='add'><i class='fi-plus large'></i></span></a></div>
                                             <div class='large-1 small-3 columns'><a href='#'><span title='decrease'><i class='fi-minus large'></i></span></a></div>
@@ -148,15 +156,6 @@ class viewClass {
                                             <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
                                             <br/><hr>
                                         </div>
-                                        <div id='products'>
-                                            <div class='large-4 small-8 columns' ><a href='#'>BirdieBoo</a></div><br>
-                                            <div class='large-1 small-3 columns'><a href='#'><span title='add'><i class='fi-plus large'></i></span></a></div>
-                                            <div class='large-1 small-3 columns'><a href='#'><span title='decrease'><i class='fi-minus large'></i></span></a></div>
-                                            <div class='large-1 small-3 columns'><a href='#'><span title='delete'><i class='fi-x large'></i></span></a></div>
-                                            <div class='large-4 small-12 columns'><i class='fi-price-tag large'> 10.00</i></div>
-                                            <br/><hr>
-                                        </div>
-
                                      <div>
 
                                         <p>
@@ -204,7 +203,7 @@ class viewClass {
         $img = '<img src="data:image/png;base64,'.base64_encode($articleImage).'">';
 
         $ret = "
-
+            <div class='large-12 small-8 columns'><a href=?><h4>Articles - Back To Categories</h4></a></div>
              <div class='large-3 panel columns'>
                  <fieldset>
                     $img

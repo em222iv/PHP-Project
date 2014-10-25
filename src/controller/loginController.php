@@ -36,12 +36,16 @@ class loginController{
 
         //login if session exist
         if($this->loginModel->loginSESSIONExist()){
-            return $this->adminController->adminControll();
+            if($this->loginModel->checkUserSafetySession()){
+                return $this->adminController->adminControll();
+            }
         }
 
         //login verification -> logged in
         if($this->adminView->getLogged()){
             //check database for match
+
+
             $this->loginRepository->getDBUsers($this->username);
 
             $this->db_username = $this->loginRepository->getDBUsername();
@@ -49,6 +53,7 @@ class loginController{
 
             if($this->loginModel->userValidationModel($this->username,$this->password)){
                 if($this->loginModel->createLoginSESSION()){
+                    $this->loginModel->userSafetySession();
                     return $this->adminView->loggedInForm();
                 }
             }

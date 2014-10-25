@@ -6,37 +6,44 @@
  * Time: 22:26
  */
 
+require_once("commonModel.php");
 class AdminModel{
-
+    private $commonModel;
     private $adminRepository;
+    private $errorMSG;
     public function __construct(AdminRepository $adminRepository) {
         $this->adminRepository = $adminRepository;
+        $this->commonModel = new CommonModel();
     }
 
-    public function validateAddorEditContent($name,$desc = null,$price = null) {
-
+    public function validateAddorEditContent($name = null,$desc = null,$price = null) {
+            var_dump($price);
             if(isset($name)){
+
                 if(strlen($name) < 2){
-                    echo "Användarenamet är för kort. Minst 2 tecken";
+                    $this->errorMSG = 0;
                     return false;
                 }
 
                 if($name != strip_tags($name)) {
-                    $this->username = strip_tags($name);
-                    echo "Användarnamnet innehåller ogiltiga tecken";
+                    $this->errorMSG = 0;
                     return false;
                 }
             }
-
             if(isset($desc)){
                 if(strlen($desc) < 10){
-                    echo "Det måste finnas en beskrivning av produkten";
+                    $this->errorMSG = 1;
+                    return false;
+                }
+                if($desc != strip_tags($desc)) {
+                    $this->errorMSG = 1;
                     return false;
                 }
             }
             if(isset($price)){
                 if($price = ""){
-                    echo "Ange ett pris";
+                    var_dump('1');
+                    $this->errorMSG = 2;
                     return false;
                 }
             }
@@ -46,10 +53,12 @@ class AdminModel{
 
 
     public function storeCategory($category) {
-        return $_SESSION['category'] = $category;
+        return $this->commonModel->storeCategory($category);
     }
     public function getStoredCategory() {
-        return $_SESSION['category'];
+        if(isset($_SESSION['category'])){
+            return $this->commonModel->getStoredCategory();
+        }
     }
     public function storeArticle($article) {
         return $_SESSION['article'] = $article;
@@ -57,17 +66,17 @@ class AdminModel{
     public function getStoredArticle() {
         return $_SESSION['article'];
     }
-    public function replaceWhiteSpace($name) {
 
-        return $name = preg_replace('/\s+/', '9', $name);
+    public function replaceSpaceWithChar($name) {
+        return $this->commonModel->replaceSpaceWithChar($name);
     }
 
-    ///FIXA DETTTA
-    public function replaceSlashWithSpace($name) {
-        var_dump($name);
-        $name1 = $name[0][1];
-        var_dump($name1);
-        return $name[0][1] = str_replace(9, " ", $name1);
+    public function replaceCharWithSpace($names) {
+        return $this->commonModel->replaceCharWithSpace($names);
     }
-
+    public function getErrorMSG () {
+        if(isset($this->errorMSG)){
+            return $this->errorMSG;
+        }
+    }
 }

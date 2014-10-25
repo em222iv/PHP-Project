@@ -7,60 +7,69 @@
  */
 
 class adminView {
+    private static $loginButton = 'loginButton';
+    private static $username = 'username';
+    private static $password = 'password';
+    private static $admin = 'admin';
+    private static $logged = 'logged';
+    private static $edit = 'edit';
+    private static $delete = 'delete';
+    private static $add = 'add';
+    private static $logoutButton = 'logoutButton';
 
 //  Navigation with getters for admin pages
 
     public function getloginButton() {
-        if(isset($_POST['loginButton']))
+        if(isset($_POST[self::$loginButton]))
         {
-            return $_POST['loginButton'];
+            return $_POST[self::$loginButton];
         }
         return false;
     }
 
     public function getUsername() {
-        if(isset($_POST['username']))
+        if(isset($_POST[self::$username]))
         {
-            return $_POST['username'];
+            return$_POST[self::$username];
         }
         return false;
     }
 
     public function getPassword(){
-        if(isset($_POST['password']))
+        if(isset($_POST[self::$password]))
         {
-            return $_POST['password'];
+            return $_POST[self::$password];
         }
         return false;
     }
 
     function getAdmin() {
-        if(isset($_GET['admin'])) {
+        if(isset($_GET[self::$admin])) {
                 return true;
             }
         return false;
     }
     function getLogged() {
-        if(isset($_GET['logged'])) {
+        if(isset($_GET[self::$logged])) {
             return true;
         }
         return false;
     }
     function edit() {
-        if(isset($_GET['edit'])) {
+        if(isset($_GET[self::$edit])) {
             return true;
         }
         return false;
     }
     function add() {
-        if(isset($_GET['add'])) {
+        if(isset($_GET[self::$add])) {
             return true;
         }
         return false;
     }
 
     function logout() {
-        if(isset($_POST['logoutButton'])) {
+        if(isset($_POST[self::$logoutButton])) {
             return true;
         }
         return false;
@@ -72,22 +81,22 @@ class adminView {
 
     $ret = "
 
-        <form method='post' action='?logged'>
+        <form method='post' action='?".self::$logged."'>
           <div class='row'>
             <h3>Administrator</h3>
             <div class='large-6 columns'>
                 <label> Username
               <!--<label class='error''>Error-->
-                <input type='text' name='username'>
+                <input type='text' name='".self::$username."'>
               </label>
              <!-- <small class='error'></small>-->
             </div>
             <div class='large-6 columns'>
                 <label> Password
-                    <input type='password' name='password'>
+                    <input type='password' name='".self::$password."'>
               </label>
             </div>
-            <input type='submit' class='button expand' name='loginButton' value='LOGIN'>
+            <input type='submit' class='button expand' name='".self::$loginButton."' value='LOGIN'>
             <a href='?' class='button expand'>BACK</a>
           </div>
         </form>
@@ -99,14 +108,14 @@ class adminView {
 public function loggedInForm() {
 
     $ret = "
-            <form method='post' action='?admin'>
+            <form method='post' action='?".self::$admin."'>
                  <div class='row'>
                     <div class='large-12 columns'>
                     <h3>Administrator</h3>
-                    <a href='?add' class='button expand'>ADD</a>
-                    <a href='?edit' class='button expand'>EDIT</a>
-                    <a href='?delete' class='button expand'>DELETE</a>
-                    <input type='submit' class='button expand alert' name='logoutButton' value='LOGOUT'>
+                    <a href='?".self::$add."' class='button expand'>ADD</a>
+                    <a href='?".self::$edit."' class='button expand'>EDIT</a>
+                    <a href='?".self::$delete."' class='button expand'>DELETE</a>
+                    <input type='submit' class='button expand alert' name='".self::$logoutButton."' value='LOGOUT'>
                     </div>
                 </div>
             </form>
@@ -150,7 +159,7 @@ public function loggedInForm() {
                      </table>
                 </div>
                 <a href='?' class='button expand'>CONFIRM EDITS</a>
-                <a href='?logged' class='button expand'>BACK</a>
+                <a href='?".self::$logged."' class='button expand'>BACK</a>
             </div>
     ";
         return $ret;

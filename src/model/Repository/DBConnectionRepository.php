@@ -12,9 +12,9 @@ class DBConnectionRepository {
      protected $dbPassword = 'root';
      protected $dbConnstring = 'mysql:host=localhost;dbname=webshop';
      protected $dbConnection;
-      /* protected $dbUsername = 'eerie_se';
-       protected $dbPassword = 'NyUYN8xk';
-       protected $dbConnstring = 'mysql:host=eerie.se.mysql;dbname=eerie_se';*/
+    /*protected $dbUsername = 'eerie_se';
+     protected $dbPassword = 'NyUYN8xk';
+     protected $dbConnstring = 'mysql:host=eerie.se.mysql;dbname=eerie_se';*/
         //PDO connection
     public function connectdb(){
 

@@ -21,12 +21,15 @@ class loginModel{
 
     //validates db info with input
     public function userValidationModel($username,$password) {
+
+
         $this->db_username = $this->loginRepository->getDBUsername();
         $this->db_password = $this->loginRepository->getDBPassword();
 
-       if($username !== $this->db_username && $password == $this->db_password ||
-            $username == $this->db_username && $password !== $this->db_password ||
-            $username !== $this->db_username && $password !== $this->db_password){
+
+       if($username !== $this->db_username && password_verify($password, $this->db_password) ||
+            $username == $this->db_username && !password_verify($password, $this->db_password) ||
+            $username !== $this->db_username && !password_verify($password, $this->db_password)){
 
             $this->errorMessage = "";
             return false;
@@ -37,9 +40,8 @@ class loginModel{
             return false;
         }
 
-        if($password == $this->db_password);
+        if(password_verify($password, $this->db_password));
         {
-
             return true;
         }
     }
@@ -62,5 +64,13 @@ class loginModel{
 
         unset($_SESSION['login']);
         return true;
+    }
+    public function userSafetySession() {
+        $_SESSION['usersafety'] = $_SERVER['HTTP_USER_AGENT'];
+    }
+    public function checkUserSafetySession() {
+        if($_SESSION['usersafety'] = $_SERVER['HTTP_USER_AGENT']) {
+            return true;
+        }
     }
 }

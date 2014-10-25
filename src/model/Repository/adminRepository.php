@@ -8,14 +8,20 @@
 
 
 require_once("DBConnectionRepository.php");
+require_once("commonRepository.php");
+
 class AdminRepository{
     protected $dbTable;
     private $dbConnection;
     private $db;
+    private $commonRepository;
 
     public function __construct() {
+        $this->commonRepository = new CommonRepository();
+
         $this->dbConnection = new DBConnectionRepository();
         $this->db = $this->dbConnection->connectdb();
+
     }
 
     //add section
@@ -27,7 +33,7 @@ class AdminRepository{
             $fp = fopen($tmpName, 'r');
             $data = fread($fp, filesize($tmpName));
             fclose($fp);
-            var_dump($name);
+
             $sql = "INSERT INTO categories (c_name,img) VALUES (:c_name,:img);
                     CREATE TABLE IF NOT EXISTS $name (
                         id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -40,9 +46,8 @@ class AdminRepository{
             $q->execute(array(':c_name'=>$name,
                               ':img'=>$data));
 
-
          } catch (Exception $e) {
-             echo "couldnt create category";
+             throw new Exception("failed to create category");
              return false;
          }
         return true;
@@ -65,7 +70,7 @@ class AdminRepository{
                           ':img'=>$data));
 
         } catch (Exception $e) {
-            echo "couldnt create article";
+            throw new Exception("couldnt create article");
             return false;
         }
         return true;
@@ -84,7 +89,7 @@ class AdminRepository{
             }
 
         } catch (Exception $e) {
-            echo "couldnt update category";
+            throw new Exception("coudlnt update category");
             return false;
         }
 
@@ -101,31 +106,25 @@ class AdminRepository{
                     RENAME TO $c_name";
             $this->db->query($sql);
         } catch (Exception $e) {
-            echo "couldnt update article";
+            throw new Exception("couldnt update article");
             return false;
         }
 
         return true;
     }
 
-    public function addEditedArticleToDB($db_c_name,$db_a_name,$a_name,$a_desc,$a_price) {
+    public function addEditedArticleToDB($id,$db_c_name,$a_name,$a_desc,$a_price) {
         $table = $db_c_name;
-        try {
-
-            if($this->doesArticleExist($a_name)){
 
                 $sql = "UPDATE $table
                          SET a_name = ?,a_description = ?,a_price = ?
-                         WHERE a_name = ?";
+                         WHERE id = ?";
                 $q = $this->db->prepare($sql);
 
-                $q->execute(array($a_name,$a_desc,$a_price,$db_a_name));
-            }
+                $q->execute(array($a_name,$a_desc,$a_price,$id));
 
-        } catch (Exception $e) {
-            echo "couldnt update article";
-            return false;
-        }
+
+
     return true;
     }
 
@@ -152,32 +151,8 @@ class AdminRepository{
         return true;
     }
 
-
-
-
-
-    //getters from database
-    public function doesCategoryExist($c_name) {
-        $results = $this->db->query("SHOW TABLES LIKE '$c_name'");
-
-        if($results->rowCount()>0){
-            echo 'category exists';
-            return false;
-        }
-        return true;
-    }
-
-    public function doesArticleExist($a_name) {
-        $results = $this->db->query("SHOW TABLES LIKE '$a_name'");
-
-        //validering ska läggas i modell
-        if(!$results) {
-            return true;
-        }
-        if($results->rowCount()>0){echo 'table exists'; return false;}
-        return true;
-    }
-    public function newArticlePicture($category,$a_name,$image) {
+//picture section
+    public function newArticlePicture($category,$id,$image) {
         $table = $category;
 
         $tmpName = $image['tmp_name'];
@@ -188,10 +163,10 @@ class AdminRepository{
 
         $sql = "UPDATE $table
                      SET img = ?
-                     WHERE a_name = ?";
+                     WHERE id = ?";
         $q = $this->db->prepare($sql);
 
-        $q->execute(array($data,$a_name));
+        $q->execute(array($data,$id));
     }
     public function newCategoryPicture($category,$image) {
 
@@ -210,60 +185,59 @@ class AdminRepository{
 
 
 
-//delas?
+    //getters from database
+    public function doesCategoryExist($c_name) {
+
+        $results = $this->db->query("SHOW TABLES LIKE '$c_name'");
+
+        if($results->rowCount()>0){echo 'table exists'; return false;}
+        return true;
+
+    }
+
+    //edit article behöveer en egen validering för att kunna ändra sina uppgifter utan att byta namn,
+    //men samtidigt inte kunna lägga till några nya artikar med samma namn
+    public function doesArticleExist($a_name,$category) {
+
+        try {
+            $sql = "SELECT * FROM $category WHERE a_name =  :a_name";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':a_name',$a_name, PDO::PARAM_STR);
+            $stmt->execute();
+            $result = $stmt->fetchAll();
 
 
+        } catch (Exception $e) {
+            throw new Exception("failed to see if article exists");
+            return false;
+        }
+        if(count($result)>0){
+            throw new Exception("article exists");
+            return false;
+        }
+        return true;
+    }
     public function getCategoryInfo($category){
-
-
         $sql = "SELECT * FROM categories WHERE c_name =  :c_name";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':c_name',$category, PDO::PARAM_STR);
         $stmt->execute();
         $result = $stmt->fetchAll();
 
-
-
         return $result;
-    }
 
+    }
+    //delas
     public function getArticleInfo($article,$category) {
-
-        $a_name = $article;
-        $c = $category;
-
-        $sql = "SELECT * FROM $c WHERE a_name =  :a_name";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':a_name',$a_name, PDO::PARAM_STR);
-        $stmt->execute();
-        $result = $stmt->fetchAll();
-
-        return $result;
+       return $this->commonRepository->getArticleInfo($this->db,$article,$category);
     }
-
 
     public function getCategoryArticles($c_name){
-
-        $name = $c_name;
-
-        $sql = "SELECT * FROM $name";
-        $sth = $this->db->prepare($sql);
-        $sth->execute();
-
-        $result = $sth->fetchAll();
-
-        return $result;
+        return $this->commonRepository->getArticlesFromChosenCategory($this->db,$c_name);
     }
 
     public function getAllCategories(){
-
-        $sql = "SELECT * FROM categories";
-        $sth = $this->db->prepare($sql);
-        $sth->execute();
-
-        $result = $sth->fetchAll();
-
-        return $result;
+        return $this->commonRepository->getAllCategories($this->db);
     }
 
 }

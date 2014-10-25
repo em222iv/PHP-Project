@@ -33,17 +33,17 @@ class checkoutView {
                   </label>
                 </div>
                 <hr>
-                <div class='large-3 columns''>
+                <div class='large-3 columns'>
                   <label>Adress 1
                     <input type='text' placeholder='ex. Adelgatan' />
                   </label>
                 </div>
-                <div class='large-3 columns''>
+                <div class='large-3 columns'>
                   <label>Adress 2
                     <input type='text' placeholder='Moms adress' />
                   </label>
                 </div>
-                <div class='large-2 columns''>
+                <div class='large-2 columns'>
                   <label>Postnumber
                     <input type='text' placeholder='ex. 76240' />
                   </label>
@@ -82,6 +82,8 @@ class checkoutView {
                   </label>
                 </div>
                 <hr>
+                </div>
+
         </form>
 
 
@@ -96,7 +98,7 @@ class checkoutView {
                                   <h4>Cart</h4><hr/>
                                   <h5 class=subheader>This is your shoppingcart. Please mind your order to be correct.
                                   </h5>
-                                  <div class=show-for-small align=center>
+                                  <div class=show-for-small>
                                         <a href=# class='small radius button expand'>Update cart</a><br>
                                         <a href=# class='small radius button expand'>Confirm purchase</a>
                                   </div>

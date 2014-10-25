@@ -23,6 +23,8 @@ class loginRepository{
 
     }
 
+
+
     //Data import section
     public function getDBUsers($username) {
 
@@ -38,7 +40,6 @@ class loginRepository{
         $this->db_id = $result[0];
         $this->db_username = $result[1];
         $this->db_password = $result[2];
-
 
         return true;
     }
