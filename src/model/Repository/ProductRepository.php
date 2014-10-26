@@ -9,14 +9,10 @@
 require_once("DBConnectionRepository.php");
 require_once("commonRepository.php");
 class productRepository{
-
     protected $dbTable;
     private $commonRepository;
-    private $categories;
-    private $array;
-    private $categoryObject;
-
     private $dbConnection;
+    private $db;
 
     public function __construct() {
         $this->dbConnection = new DBConnectionRepository();

@@ -15,16 +15,13 @@ class AdminModel{
         $this->adminRepository = $adminRepository;
         $this->commonModel = new CommonModel();
     }
-
+    //validation for products going in to databse
     public function validateAddorEditContent($name = null,$desc = null,$price = null) {
-            var_dump($price);
             if(isset($name)){
-
                 if(strlen($name) < 2){
                     $this->errorMSG = 0;
                     return false;
                 }
-
                 if($name != strip_tags($name)) {
                     $this->errorMSG = 0;
                     return false;
@@ -42,16 +39,13 @@ class AdminModel{
             }
             if(isset($price)){
                 if($price = ""){
-                    var_dump('1');
                     $this->errorMSG = 2;
                     return false;
                 }
             }
-
         return true;
     }
-
-
+//storing info in sessions
     public function storeCategory($category) {
         return $this->commonModel->storeCategory($category);
     }
@@ -66,14 +60,24 @@ class AdminModel{
     public function getStoredArticle() {
         return $_SESSION['article'];
     }
+    public function storeId($id) {
+        return $_SESSION['id'] = $id;
+    }
+    public function getStoredId() {
+        return $_SESSION['id'];
+    }
 
+    //replacing space with characters for databse
+    //should be put in common model
     public function replaceSpaceWithChar($name) {
         return $this->commonModel->replaceSpaceWithChar($name);
     }
-
+   //replacing character with - instead of spaces. to show for users
+    //this because when i try to get URL of the chosen article, spaces arent aloud
+    //should be put in common model- duplicate code
     public function replaceCharWithSpace($names) {
         return $this->commonModel->replaceCharWithSpace($names);
-    }
+    }   //return error msg if validation fails
     public function getErrorMSG () {
         if(isset($this->errorMSG)){
             return $this->errorMSG;

@@ -17,6 +17,7 @@ class EditView {
     private $errorMSG;
     private $successMSG;
 
+    private static $logged = "logged";
     private static $edit = "edit";
     private static $editCategory = "editCategory";
     private static $editCategoryName = "editCategoryName";
@@ -36,8 +37,7 @@ class EditView {
     private static $editArticleDesc = "editArticleDesc";
     private static $editCategoryConfirm = "editCategoryConfirm";
 
-
-
+    //sets arrays for dropdwn and information about products
     public function setCategories($db_categories) {
         $this->categories = $db_categories;
     }
@@ -78,7 +78,7 @@ class EditView {
 
                     <a href=?".self::$editChooseCategory." class='button expand'>EDIT CATEGORY</a>
                     <a href=?".self::$editArticleCategory." class='button expand'>EDIT ARTICLE</a>
-                    <a href='?logged' class='button expand'>BACK</a>
+                    <a href='?".self::$logged."' class='button expand'>BACK</a>
                 </div>
                 </div>
             </div>
@@ -102,6 +102,7 @@ class EditView {
     }
 
     public function editChooseCategoryForm() {
+        //sets error message, isset so that it needs a value to be rendered, else phperror
         if(isset($this->errorMSG)){
             $errorMSG = "<small class='error'>$this->errorMSG</small>";
         }else {
@@ -121,7 +122,7 @@ class EditView {
                                 $categories
                             </select>
                          <input type='submit' class='button expand' name=".self::$editCategory." value='CONFIRM'>
-                        <a href='?edit' class='button expand'>BACK</a>
+                        <a href='?".self::$edit."' class='button expand'>BACK</a>
                     </div>
                 </div>
             </form>
@@ -145,6 +146,7 @@ class EditView {
         return false;
     }
     public function editCategoryForm() {
+        //Gets category info and renders it
         if(isset($this->category[0])){
         $categoryName = $this->category[0][1];
         $categoryImage = $this->category[0][2];
@@ -170,7 +172,7 @@ class EditView {
                             $categoryName
                           </div>
                          <input type='submit' class='button expand' name=".self::$editCategoryConfirm." value='CONFIRM'>
-                        <a href='?".self::$edit." class='button expand'>BACK</a>
+                        <a href='?".self::$edit."' class='button expand'>BACK</a>
                     </div>
                 </div>
             </form>
@@ -218,7 +220,7 @@ class EditView {
                                 </select>
                             </label>
                             <input type='submit' class='button expand' name=".self::$chooseArticle."  value='CONFIRM'>
-                            <a href='?".self::$edit." class='button expand'>BACK</a>
+                            <a href='?".self::$edit."' class='button expand'>BACK</a>
 
 
                     </div>
@@ -229,7 +231,7 @@ class EditView {
         return $ret;
     }
 
-
+    //creates drodown list with article infos
     private function articleDropDownLoop(){
         $ret = '<select name='.self::$articleDropdown.'>';
 
@@ -239,14 +241,13 @@ class EditView {
         $ret .= '</select>';
         return $ret;
     }
+    //creates dropdown list with categorys
     public function dropdownArticleChoice() {
         if(isset($_POST[self::$articleDropdown])){
             return $_POST[self::$articleDropdown];
         }
         return false;
     }
-
-
 
     public function editArticle() {
         if(isset($_GET[self::$editArticle])){
@@ -255,9 +256,7 @@ class EditView {
         return false;
     }
 
-
     public function chooseArticleForm() {
-
         $articles = $this->articleDropDownLoop();
         $ret = "
             <form method='post' action='?".self::$editArticle."' enctype='multipart/form-data'>
@@ -271,7 +270,7 @@ class EditView {
                                 </select>
                             </label>
                             <input type='submit' class='button expand' name=".self::$editArticle." value='CONFIRM'>
-                            <a href='?".self::$edit." class='button expand'>BACK</a>
+                            <a href='?".self::$edit."' class='button expand'>BACK</a>
                     </div>
 
                 </div>
@@ -280,16 +279,12 @@ class EditView {
         return $ret;
     }
 
-
-
-
     public function editArticleConfirm() {
         if(isset($_GET[self::$editArticleConfirm])){
             return true;
         }
         return false;
     }
-
     public function getEditArticleName() {
         if(isset($_POST[self::$editArticleName])){
             return $_POST[self::$editArticleName];
@@ -308,14 +303,13 @@ class EditView {
         }
         return false;
     }
-
+    //vechsk if file is upload
     public function getEditImage() {
         if(!file_exists($_FILES['file']['tmp_name']) || !is_uploaded_file($_FILES['file']['tmp_name'])) {
             return false;
         }
         return true;
     }
-
     public function editArticleForm() {
         if(isset($this->article[0])){
             $articleName = $this->article[0][1];
@@ -384,34 +378,29 @@ class EditView {
         }
         return false;
     }
-
+    //validates image
     function validateImage() {
         if(isset($_FILES['file'])){
             $this->image = $_FILES["file"];
-
             if ($_FILES["file"]["error"] > 0) {
-
                 echo "Error, no picture";
                 return false;
-                //echo "Error: " . $_FILES["file"]["error"] . "<br>";
             } else {
-
-
-                //echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-                //echo "Type: " . $_FILES["file"]["type"] . "<br>";
                 if($_FILES["file"]["size"] > 1500000){
                     echo "Error, picture is to big";
                     return false;
-                } //"Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-                //echo "Stored in: " . $_FILES["file"]["tmp_name"];
+                }
             }
         }
         return true;
-
     }
     public function getImage() {
         if(isset($this->image)){
             return $this->image;
         }
+    }
+    public function unsetFile() {
+        unset($_SESSION['file']);
+
     }
 }

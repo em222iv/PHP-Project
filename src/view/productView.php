@@ -24,8 +24,8 @@ class viewClass {
         $this->image = $images;
 
     }
+    //set functions handles values that are to be shown in HTML
     public function setCategories($db_categories) {
-
     $this->categories = $db_categories;
     }
     public function setArticles($db_articles) {
@@ -33,18 +33,17 @@ class viewClass {
     }
     public function setArticleInfo($db_article) {
         $this->article = $db_article;
-
     }
     public function setEditArticleInfo() {
         $this->editArticle = array("true");
     }
+    //unset to make sure old values aren't to be shown
     public function unsetEditArray() {
         $this->editArticle = array();
     }
 
-
+    //takes array of all categories and styles it with html to match foundation
     public function categoryDropDownLoop(){
-
         $ret = "<div class='large-12 small-12 columns'><a href=?><h4>Categories</h4></a></div>";
         foreach ($this->categories as $category) {
             $ret .= "<div class='large-3 small-6 columns'>";
@@ -54,12 +53,11 @@ class viewClass {
         return $ret;
     }
 
-
+    //takes array of all articles and adds html for styling
     public function articleDropDownLoop(){
        $ret ="";
-
         if(isset($this->articles)){
-
+            //checks if there are any elements in array, if not. show "No articles Added Yet"
             if ($this->articles[0] >= 1) {
                 foreach ($this->articles as $article) {
                     $ret .= "<div class='large-3 small-6 columns'>";
@@ -77,6 +75,7 @@ class viewClass {
 
     }
 
+    //check URL for what category has been chosen
     public function getChosenCategory() {
         $request_path = $_SERVER['REQUEST_URI'];
         $path = explode("/", $request_path);
@@ -85,7 +84,7 @@ class viewClass {
 
         return $this->category;
     }
-
+    //checks URL for what article has been shown
     public function getChosenArticle() {
         $request_path = $_SERVER['REQUEST_URI'];
         $path = explode("/", $request_path);
@@ -104,41 +103,34 @@ class viewClass {
 
     public function productForm() {
 
+        //sets right article
     if($this->getArticleInfo()){
             $products = $this->articleInfoForm();
-
-        }
+        }//if articles havent been chosen, show categories
         elseif(!$this->articleDropDownLoop()){
-
             $products = $this->categoryDropDownLoop();
-
         }
-      else {
-
+      else {//if article has been chosen, show articles
             $products = $this->articleDropDownLoop();
         }
+    $ret = "
+          <div class='row'>
+               <div class='large-12 small-8 columns'><a href=?><h4>Articles - Back To Categories</h4></a></div>
+                      <div class=row>
 
-        //BUGG, LEVERERAR ALLTID ALLA SAMMA LISTA
-        $ret = "
+                            $products
 
-<!-- PRODUCTS -->
-                 <div class='row'>
-                          <div class='large-12 small-12 columns'>
-                              <div class=row>
-
-                                    $products
-
-                              </div>
                           </div>
                       </div>
-                   <div class=row>
-                  <div class='large-12 columns'>
-                      <div class=row>
-                          <div class='large-8 columns'>
-                              <div class='panel radius'>
-                                  <div class=row>
-                                      <div class='large-6 small-6 columns'>
-                                            <a name=Cart></a>
+                  </div>
+               <div class=row>
+               <div class='large-12 columns'>
+                  <div class=row>
+                      <div class='large-8 columns'>
+                          <div class='panel radius'>
+                              <div class=row>
+                                  <div class='large-6 small-6 columns'>
+                                        <a name=Cart></a>
                                           <h4>Cart</h4><hr/>
                                           <h5 class=subheader>This is your shoppingcart. Please mind your order to be correct.
                                           </h5>
@@ -185,17 +177,15 @@ class viewClass {
     }
 
     public function getArticleInfo() {
-
         if(isset($_GET['article'])){
             return true;
         }
         return false;
     }
 
-
-
     public function articleInfoForm() {
-
+        //$this->article contains the chosen article
+        //sets varibale containing article info
         $articleName = $this->article[0][1];
         $articleDesc = $this->article[0][2];
         $articlePrice = $this->article[0][3];

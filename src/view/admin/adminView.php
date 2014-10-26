@@ -17,6 +17,23 @@ class adminView {
     private static $add = 'add';
     private static $logoutButton = 'logoutButton';
 
+    private $nameErrorMSG;
+    private $passErrorMSG;
+
+
+    public function setLoginNameError($errorMSG) {
+        if(isset($errorMSG)){
+            $this->nameErrorMSG = "<small class='error'>".$errorMSG."</small>";
+        }
+
+    }
+    public function setLoginPassError($errorMSG) {
+        if(isset($errorMSG)){
+            $this->passErrorMSG = "<small class='error'>".$errorMSG."</small>";
+        }
+    }
+
+
 //  Navigation with getters for admin pages
 
     public function getloginButton() {
@@ -80,20 +97,24 @@ class adminView {
     public function loginForm() {
 
     $ret = "
-
         <form method='post' action='?".self::$logged."'>
           <div class='row'>
             <h3>Administrator</h3>
             <div class='large-6 columns'>
                 <label> Username
-              <!--<label class='error''>Error-->
-                <input type='text' name='".self::$username."'>
+                    <label class='error'>
+                    <input type='text' name='".self::$username."'>
+                    </label>
+                     ".$this->nameErrorMSG."
+                     <br>
               </label>
-             <!-- <small class='error'></small>-->
             </div>
             <div class='large-6 columns'>
                 <label> Password
-                    <input type='password' name='".self::$password."'>
+                    <label class='error'>
+                        <input type='password' name='".self::$password."'>
+                    </label>
+                    ".$this->passErrorMSG."
               </label>
             </div>
             <input type='submit' class='button expand' name='".self::$loginButton."' value='LOGIN'>

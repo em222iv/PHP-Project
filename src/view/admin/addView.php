@@ -27,6 +27,7 @@ class AddView {
     private static $addArticleConfirm = "addArticleConfirm";
     private static $categoryDropDown = "categoryDropDown";
     private static $dropdown = "dropdown";
+    private static $logged = "logged";
 
     public function __construct(){
 
@@ -35,16 +36,15 @@ class AddView {
     public function setCategories($db_categories) {
        $this->categories = $db_categories;
     }
-
+    //switch which recieves what info on what errorMessage should be rendered
     public function setErrorMSG($errorMSG) {
-
         if(is_string($errorMSG)){
             switch ($errorMSG) {
                 case "nameError":
                     $this->nameError  = "<small class='error'>Invalid name: Name has to be longer than 2 character and only alphabetic or numeric character</small>";
                     break;
                 case "imageError":
-                    $this->imageError  = "<small class='error'>Invalid picture: Picture must be smaller than 1,5MB and be of types JPG/JPEG, PNG or GIF</small>";
+                    $this->imageError  = "<small class='error'>Invalid picture: Picture must be smaller than 3MB and be of types JPG/JPEG, PNG or GIF</small>";
                     break;
                 case "priceError":
                     $this->priceError  = "<small class='error'>Invalid price: Price must be between 1 - 10000 and be of numeric characters</small>";
@@ -61,7 +61,7 @@ class AddView {
         $this->successMSG = "<span class='success label'>$successMSG</span>";
     }
 
-    //Adding category input section
+    //Adding category section
     function getAddCategoryName() {
         if(isset($_POST[self::$addCategoryName])) {
             return $_POST[self::$addCategoryName];
@@ -76,7 +76,7 @@ class AddView {
         return false;
     }
 
-    //Adding article input section
+    //Adding article  section
     function getAddArticleName() {
         if(isset($_POST[self::$addArticleName])) {
             return $_POST[self::$addArticleName];
@@ -119,7 +119,7 @@ class AddView {
                    <h3>Administrator</h3>
                     <a href='?".self::$addCategory."' class='button expand'>ADD CATEGORY</a>
                     <a href='?".self::$addArticle."' class='button expand'>ADD ARTICLE</a>
-                    <a href='?logged' class='button expand'>BACK</a>
+                    <a href='?".self::$logged."' class='button expand'>BACK</a>
                 </div>
             </div>
     ";
@@ -175,7 +175,6 @@ class AddView {
     }
 
     //Add article section
-
     public function addArticle() {
         if(isset($_GET[self::$addArticle])){
             return true;
@@ -279,30 +278,19 @@ class AddView {
 
                 $this->setErrorMSG("imageError");
                 return false;
-                //echo "Error: " . $_FILES["file"]["error"] . "<br>";
             } else {
 
-                /*$img = ImageCreateFromJpeg($_FILES["file"]["tmp_name"]);
 
-                $imageWidth = imagesx($img);
-                $imageHeight = imagesy($img);
-                $imageAspects = imagecreatetruecolor($imageWidth, $imageHeight);*/
-
-
-                //echo "Upload: " . $_FILES["file"]["name"] . "<br>";
-                //echo "Type: " . $_FILES["file"]["type"] . "<br>";
                 if($_FILES[self::$file]["size"] > 3000000){
                     echo "Error, picture is to big";
                     return false;
-                } //"Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-                //echo "Stored in: " . $_FILES["file"]["tmp_name"];
+                }
             }
         }
         return true;
 
     }
     public function getImage() {
-
         return $this->image;
     }
 }

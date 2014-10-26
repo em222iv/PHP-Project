@@ -29,12 +29,12 @@ class loginController{
 
     public function loginControll() {
 
-        //logout
+        //if logout is pressed, session is unset
         if($this->adminView->logout()){
            $this->loginModel->killLoginSESSION();
         }
 
-        //login if session exist
+        //login if session exis and checks if a different webbrowser contains the same session.
         if($this->loginModel->loginSESSIONExist()){
             if($this->loginModel->checkUserSafetySession()){
                 return $this->adminController->adminControll();
@@ -44,21 +44,22 @@ class loginController{
         //login verification -> logged in
         if($this->adminView->getLogged()){
             //check database for match
-
-
             $this->loginRepository->getDBUsers($this->username);
 
             $this->db_username = $this->loginRepository->getDBUsername();
             $this->db_password = $this->loginRepository->getDBPassword();
-
+            //validates input from user
             if($this->loginModel->userValidationModel($this->username,$this->password)){
                 if($this->loginModel->createLoginSESSION()){
                     $this->loginModel->userSafetySession();
                     return $this->adminView->loggedInForm();
                 }
             }
-
         }
-        if($this->adminView->getAdmin()){return $this->adminView->loginForm();}
+        //controls error MSGs for loginview
+        $this->adminView->setLoginNameError($this->loginModel->getNameErrorMSG());
+        $this->adminView->setLoginPassError($this->loginModel->getPassErrorMSG());
+        //return to login page if nothing matches
+        if($this->adminView->getAdmin() || $this->adminView->getLogged()){return $this->adminView->loginForm();}
     }
 }

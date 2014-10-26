@@ -23,8 +23,6 @@ class loginRepository{
 
     }
 
-
-
     //Data import section
     public function getDBUsers($username) {
 

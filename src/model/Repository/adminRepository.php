@@ -26,7 +26,7 @@ class AdminRepository{
 
     //add section
     public function addCategoryToDB($name,$image) {
-        //table tar inte emot ÅÄÖ
+        //table dont accept ÅÄÖ
          try {
             $tmpName = $image['tmp_name'];
 
@@ -185,20 +185,21 @@ class AdminRepository{
 
 
 
-    //getters from database
+    //checks if category alreayd exists
     public function doesCategoryExist($c_name) {
-
+        try{
         $results = $this->db->query("SHOW TABLES LIKE '$c_name'");
 
-        if($results->rowCount()>0){echo 'table exists'; return false;}
+        if($results->rowCount()>0){return false;}
+        } catch (Exception $e) {
+            echo "table exists";
+            return false;
+        }
         return true;
 
     }
-
-    //edit article behöveer en egen validering för att kunna ändra sina uppgifter utan att byta namn,
-    //men samtidigt inte kunna lägga till några nya artikar med samma namn
+    //checks if an article already exists
     public function doesArticleExist($a_name,$category) {
-
         try {
             $sql = "SELECT * FROM $category WHERE a_name =  :a_name";
             $stmt = $this->db->prepare($sql);
@@ -212,11 +213,12 @@ class AdminRepository{
             return false;
         }
         if(count($result)>0){
-            throw new Exception("article exists");
+            echo "article exists";
             return false;
         }
         return true;
     }
+    //get specific info of one category
     public function getCategoryInfo($category){
         $sql = "SELECT * FROM categories WHERE c_name =  :c_name";
         $stmt = $this->db->prepare($sql);
@@ -227,7 +229,7 @@ class AdminRepository{
         return $result;
 
     }
-    //delas
+    //methods exists in commonModel since their shared with other Repos
     public function getArticleInfo($article,$category) {
        return $this->commonRepository->getArticleInfo($this->db,$article,$category);
     }

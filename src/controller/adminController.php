@@ -13,38 +13,28 @@ class AdminController{
     private $addView;
     private $editView;
     private $deleteView;
-
     private $categories;
     private $articles;
     private $choosenCategoryName;
-
     private $chosenCategory;
     private $chosenArticle;
-
     private $addCategoryName;
     private $addCategoryImage;
-
     private $addArticleName;
     private $addArticleImage;
     private $addArticlePrice;
     private $addArticleDesc;
-
     private $editCategoryName;
-    private $editCategoryImage;
-
     private $editArticleName;
     private $editArticleImage;
     private $editArticlePrice;
     private $editArticleDesc;
-
     private $adminModel;
     private $adminRepository;
-
     private $productView;
     private $errorHandler;
-
-
-
+    private $id;
+    //gets injected with to get to objects
     public function __construct($loginController,deleteView $deleteView, adminView $adminView, AddView $addView, $adminController, EditView $editView, AdminModel $adminModel, AdminRepository $adminRepository, viewClass $productView,ErrorHandler $errorHandler) {
         $this->deleteView = $deleteView;
         $this->adminModel = $adminModel;
@@ -60,18 +50,15 @@ class AdminController{
 
     public function adminControll() {
 
-
-
-        //Add section
-        //add category
+//Add section
+//add category
         if($this->addView->addCategoryConfirm()){
             $this->addCategoryName = $this->adminModel->replaceSpaceWithChar($this->addView->getAddCategoryName());
-
+            //validates image
             if($this->addView->validateImage()){
                 $this->addCategoryImage = $this->addView->getImage();
-
+                //valides input
                 if($this->adminModel->validateAddorEditContent($this->addCategoryName)) {
-
                     if($this->adminRepository->doesCategoryExist($this->addCategoryName)){
                         $this->adminRepository->addCategoryToDB($this->addCategoryName,$this->addCategoryImage);
                         $this->addView->setSuccessMSG("success");
@@ -80,9 +67,8 @@ class AdminController{
             }
         }
 
-        //add article
+//add article
         $this->categories = $this->adminRepository->getAllCategories();
-
         $this->categories  = $this->adminModel->replaceCharWithSpace($this->categories);
 
         $this->addView->setCategories($this->categories);
@@ -92,10 +78,10 @@ class AdminController{
 
             $this->addArticleDesc = $this->addView->getAddArticleDesc();
             $this->addArticlePrice = $this->addView->getAddArticlePrice();
-
+            //validates image
             if($this->addView->validateImage()){
-
                 $this->addArticleImage = $this->addView->getImage();
+                    //vaidates input
                     if($this->adminModel->validateAddorEditContent($this->addArticleName,$this->addArticleDesc,$this->addArticlePrice)) {
                         if($this->adminRepository->doesArticleExist($this->addArticleName,$this->chosenCategory)){
                             $this->adminRepository->addArticleToDB($this->chosenCategory,$this->addArticleName,$this->addArticleDesc,$this->addArticlePrice,$this->addArticleImage);
@@ -105,46 +91,36 @@ class AdminController{
             }
         }
 
-        //Edit section
-        //edit category
+//Edit section
+//edit category
         $this->categories = $this->adminModel->replaceCharWithSpace($this->adminRepository->getAllCategories());
         $this->editView->setCategories($this->categories);
 
-
         if($this->editView->editCategory()){
-
-
+            //gets chosen category and stores it into session
                 $this->adminModel->storeCategory($this->adminModel->replaceSpaceWithChar($this->editView->dropdownCategoryChoice()));
-
                 $this->chosenCategory = $this->adminModel->getStoredCategory();
                 $this->chosenCategory = $this->adminRepository->getCategoryInfo($this->chosenCategory);
 
                 $this->chosenCategory = $this->adminModel->replaceCharWithSpace($this->chosenCategory);
+                //shows the chosen category
                 $this->editView->setCategory($this->chosenCategory);
-
-
                 return $this->editView->editCategoryForm();
-
         }
-
+        //Confirmbutton clicked, get the input and valides it
         if($this->editView->editCategoryConfirm()){
-
             $this->chosenCategory = $this->adminModel->getStoredCategory();
             $this->editCategoryName = $this->adminModel->replaceSpaceWithChar($this->editView->editCategoryName());
-
             if($this->editView->getEditImage()) {
-
                 if($this->editView->validateImage()){
                     $this->editArticleImage = $this->editView->getImage();
                     $this->adminRepository->newCategoryPicture($this->chosenCategory,$this->editArticleImage);
                 }
             }
-
             if($this->adminModel->validateAddorEditContent($this->editCategoryName)) {
-
-
                 if($this->adminRepository->doesCategoryExist($this->editCategoryName)){
                     $this->adminRepository->addEditedCategoryToDB($this->chosenCategory,$this->editCategoryName);
+                    //if all has gone right, set success message
                     $this->editView->setSuccessMSG("success");
 
                 }
@@ -152,7 +128,8 @@ class AdminController{
         }
 
 
-        //edit article
+//Edit article
+
         if($this->editView->chooseArticle())  {
             try {
 
@@ -167,19 +144,17 @@ class AdminController{
         }
 
         if($this->editView->editArticle()){
-            //unset i vyn
-            unset($_FILES['file']);
+            $this->editView->unsetFile();
             try {
-            $this->chosenCategory = $this->adminModel->getStoredCategory();
-            $this->adminModel->storeArticle($this->adminModel->replaceSpaceWithChar($this->editView->dropdownArticleChoice()));
-            $this->chosenArticle = $this->adminModel->getStoredArticle();
-            $this->editView->setArticle($this->adminModel->replaceCharWithSpace($this->adminRepository->getArticleInfo($this->chosenArticle,$this->chosenCategory)));
+                $this->chosenCategory = $this->adminModel->getStoredCategory();
+                $this->adminModel->storeArticle($this->adminModel->replaceSpaceWithChar($this->editView->dropdownArticleChoice()));
+                $this->chosenArticle = $this->adminModel->getStoredArticle();
+                $this->editView->setArticle($this->adminModel->replaceCharWithSpace($this->adminRepository->getArticleInfo($this->chosenArticle,$this->chosenCategory)));
 
-                $id  = $this->adminRepository->getArticleInfo($this->chosenArticle,$this->chosenCategory);
-                $_SESSION['id'] = $id[0][0];
-                var_dump( $_SESSION['id']);
-            return $this->editView->editArticleForm();
-            exit();
+                $this->id  = $this->adminRepository->getArticleInfo($this->chosenArticle,$this->chosenCategory);
+                $this->adminModel->storeId($this->id[0][0]);
+                return $this->editView->editArticleForm();
+                exit();
             }catch(Exception $e) {
                 echo 'Error: ' .$e->getMessage();
                 return $this->editView->editArticleCategoryForm();
@@ -187,20 +162,21 @@ class AdminController{
         }
 
         if($this->editView->editArticleConfirm()){
+            //takes input, validates it and sets it.
+            //try failes. sets an errormessage
             try{
-
                 $this->chosenCategory = $this->adminModel->getStoredCategory();
                 $this->chosenArticle = $this->adminModel->getStoredArticle();
 
                 $this->editArticleName = $this->adminModel->replaceSpaceWithChar($this->editView->getEditArticleName());
                 $this->editArticleDesc = $this->editView->getEditArticleDesc();
                 $this->editArticlePrice = $this->editView->getEditArticlePrice();
-                $id = $_SESSION['id'];
+                $this->id= $this->adminModel->getStoredId();
                 if($this->editView->getEditImage()) {
 
                     if($this->editView->validateImage()){
                         $this->editArticleImage = $this->editView->getImage();
-                        $this->adminRepository->newArticlePicture($this->chosenCategory,$id,$this->editArticleImage);
+                        $this->adminRepository->newArticlePicture($this->chosenCategory,$this->id,$this->editArticleImage);
                     }
                 }
             }catch(Exception $e) {
@@ -209,7 +185,7 @@ class AdminController{
             }
             if($this->adminModel->validateAddorEditContent($this->editArticleName,$this->editArticleDesc,$this->editArticlePrice)) {
                 try {
-                    $this->adminRepository->addEditedArticleToDB($id,$this->chosenCategory, $this->editArticleName, $this->editArticleDesc, $this->editArticlePrice);
+                    $this->adminRepository->addEditedArticleToDB($this->id,$this->chosenCategory, $this->editArticleName, $this->editArticleDesc, $this->editArticlePrice);
                     $this->editView->setSuccessMSG("success");
                 }catch(Exception $e) {
                     echo 'Error: ' .$e->getMessage();
@@ -219,7 +195,8 @@ class AdminController{
         }
 
 
-        //DELETE SECTION
+//DELETE SECTION
+//delete category
         try {
             if($this->deleteView->deleteCategory() || $this->deleteView->chooseCategory()){
                 $this->categories=$this->adminRepository->getAllCategories();
@@ -235,6 +212,7 @@ class AdminController{
             return $this->deleteView->deleteMenuForm();
             die();
         }
+//delete article
         try{
             if($this->deleteView->deleteArticle()){
                 $this->choosenCategoryName = ($this->adminModel->replaceSpaceWithChar($this->deleteView->getChoosenCategory()));
@@ -253,8 +231,11 @@ class AdminController{
             return $this->deleteView->deleteMenuForm();
         }
 
+        //sets errormessage in errorHandler view if validation fails
         $this->errorHandler->setErrorMSG($this->adminModel->getErrorMSG());
 
+
+        //paging in administator pages
         //delete
         if($this->deleteView->delete()){
             return $this->deleteView->deleteMenuForm();
@@ -308,7 +289,7 @@ class AdminController{
         if($this->addView->addMenu()){
             return $this->addView->addForm();
         }
-
+        //default
         if($this->adminView->getAdmin() || $this->adminView->getLogged()){
             return $this->adminView->loggedInForm();
         }

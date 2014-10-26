@@ -15,20 +15,16 @@ class ErrorHandler{
         $this->addView = $addView;
         $this->editView = $editView;
 
-
     }
     public function setErrorMSG($errorMSG) {
         $this->errorCase = $errorMSG;
-
         $this->errorHandlingSwitch();
     }
+    //gets info on what errormsg should be rendering in its view
     public function errorHandlingSwitch() {
-
         if(is_int($this->errorCase)){
-
             switch ($this->errorCase) {
                 case 0:
-
                     $this->addView->setErrorMSG("nameError");
                     $this->editView->setEditErrorMSG("Invalid name: Name has to be longer than 2 character and only alphabetic or numeric character");
                     break;

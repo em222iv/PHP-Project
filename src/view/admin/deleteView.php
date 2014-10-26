@@ -20,14 +20,19 @@ class deleteView {
     private static $deleteArticle = 'deleteArticle';
     private static $chooseCategoryDropdown = 'chooseCategoryDropdown';
     private static $articleDropdown = 'articleDropdown';
+    private static $logged = "logged";
 
+
+    //sets categorylist
     public function setCategories($db_categories) {
         $this->products = $db_categories;
     }
-
+    //sets success msg
     public function setSuccessMSG($successMSG) {
         $this->successMSG = "<span class='success label'>$successMSG</span>";
     }
+
+    //gets categoryarray and renders it with html
     private function categoryDropDownLoop(){
         $ret = '<select name='.self::$categoryDropdown.'>';
 
@@ -80,7 +85,7 @@ class deleteView {
                         <div class='large-12 columns'>
                              <a href='?".self::$deleteCategory."' class='button expand'>DELETE CATEGORY</a>
                              <a href='?".self::$chooseCategory."' class='button expand'>DELETE ARTICLE</a>
-                            <a href='?logged' class='button expand'>BACK</a>
+                            <a href='?".self::$logged."' class='button expand'>BACK</a>
                         </div>
                     </div>
                 </div>
@@ -163,9 +168,6 @@ class deleteView {
 
         return $ret;
     }
-
-
-
 
     public function deleteArticleConfirm() {
         if(isset($_GET[self::$deleteArticleConfirm])){

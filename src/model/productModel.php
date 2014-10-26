@@ -25,11 +25,13 @@ class productModel{
     public function unsetUserSessions() {
         unset($_SESSION['category']);
     }
+    //replacing space with characters for database
+    //should be replaced by commonModel functions
     public function replaceSpaceWithChar($name) {
         return $this->commonModel->replaceSpaceWithChar($name);
     }
-
-    ///FIXA DETTTA
+    //replacing character with - instead of spaces. to show for users
+    //should be replaced by commonModel functions
     public function replaceCharWithSpace($names) {
         return $this->commonModel->replaceCharWithSpace($names);
     }

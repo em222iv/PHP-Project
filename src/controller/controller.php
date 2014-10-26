@@ -46,50 +46,38 @@ class ControllerClass {
     private $deleteView;
     private $errorHandler;
 
-
+//"master contructor" call and crates object to inject futher to other classes
     public function __construct() {
-
         $this->checkoutView = new checkoutView();
         $this->view = new viewClass();
-
         $this->adminView = new adminView();
-
-
-
         $this->loginRepository = new loginRepository();
         $this->loginModel = new loginModel($this->loginRepository);
-
         $this->productRepository = new ProductRepository();
         $this->productModel = new productModel();
         $this->productController = new productController($this->productModel,$this->adminView,$this->view, $this->productRepository,$this->loginModel);
-
         $this->adminRepository = new AdminRepository();
         $this->adminModel = new AdminModel($this->adminRepository);
-
-
         $this->addView = new AddView();
         $this->editView = new EditView();
         $this->deleteView = new DeleteView();
         $this->errorHandler = new ErrorHandler($this->editView,$this->addView);
-
         $this->adminController = new AdminController($this->loginController,$this->deleteView, $this->adminView, $this->addView, $this->adminController, $this->editView,$this->adminModel,$this->adminRepository,$this->view,$this->errorHandler);
         $this->loginController = new loginController($this->loginModel, $this->loginRepository,$this->adminView, $this->adminController);
-
-
     }
 
     public function formControll() {
-
+        //check if user wants to login
         $admincontroll = $this->loginController->loginControll();
         if($admincontroll != null){
             return $admincontroll;
         }
-
+        //checks if user goes to checkout view
         if($this->checkoutView->checkoutClicked()){
             return $this->checkoutView->checkoutUserInfoForm();
         }
+        //allways goes to products page at first
         $this->productController->productControll();
-
         return $this->view->productForm();
     }
 }
