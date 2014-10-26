@@ -16,4 +16,4 @@ Testrapport
 https://docs.google.com/document/d/1mqUyYMbcw2iNN_x2tk-4WciDbPAC0AfOsJkADoB9sds/edit
 
 Klassdiagram
-https://www.dropbox.com/s/tnazlq6dlq4zojc/UML.png?dl=0
+https://www.dropbox.com/s/1ipa1f8cjush3qi/UML%20%281%29.png?dl=0
